@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
@@ -11,7 +12,7 @@ import 'bloc/loading/state.dart';
 import 'bloc/loading/events.dart';
 import 'bloc/main/bloc.dart';
 import 'bloc/main/events.dart';
-import 'bloc/main/states.dart';
+import 'bloc/main/state.dart';
 import 'data/settings/settings_repository.dart';
 
 final GoRouter _router = GoRouter(
@@ -20,7 +21,8 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => BlocProvider(
-        create: (context) => MainBloc(context.read<SettingsRepository>()),
+        create: (context) =>
+            MainBloc(context.read<SettingsRepository>())..add(AppLoaded()),
         child: const MainPage(),
       ),
     ),
@@ -34,7 +36,7 @@ final GoRouter _router = GoRouter(
   ],
 );
 
-ThemeData _createTheme(bool darkMode) => ThemeData(
+ThemeData _createTheme({bool darkMode = false}) => ThemeData(
     brightness: darkMode ? Brightness.dark : Brightness.light,
     accentColor: SystemTheme.accentInstance.accent.toAccentColor());
 
@@ -52,9 +54,8 @@ Future<void> main() async {
     create: (context) => SettingsRepository(),
     child: FluentApp.router(
       title: 'hk_launcher',
-      themeMode: ThemeMode.system,
-      theme: _createTheme(false),
-      darkTheme: _createTheme(true),
+      theme: _createTheme(),
+      darkTheme: _createTheme(darkMode: true),
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       color: SystemTheme.accentInstance.accent.toAccentColor(),
@@ -68,23 +69,67 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(context) => BlocConsumer<MainBloc, MainState>(
         listener: (context, state) {
-          if (!state.hkPathPresent) {
+          if (state.hkPathDialog != null) {
+            final TextEditingController pathController =
+                TextEditingController();
+
             showDialog(
               context: context,
-              builder: (context) => ContentDialog(
-                title: Text('No WiFi connection'),
-                content: Text('Check your connection and try again'),
-                actions: [
-                  Button(
-                      child: Text('Ok'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      })
-                ],
+              builder: (_) => BlocProvider.value(
+                value: context.read<MainBloc>(),
+                child: ContentDialog(
+                  title: const Text('Hollow Knight location'),
+                  backgroundDismiss: false,
+                  content: BlocConsumer<MainBloc, MainState>(
+                    listener: (context, state) {
+                      pathController.text = state.hkPathDialog!.path ?? '';
+                    },
+                    builder: (context, state) {
+                      return Column(
+                        children: <Widget>[
+                          const Text(
+                              'Please provide the path to the Hollow Knight directory.'),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: TextBox(controller: pathController),
+                              ),
+                              FilledButton(
+                                  child: const Text('Browse'),
+                                  onPressed: () => context
+                                      .read<MainBloc>()
+                                      .add(PickHKFolder()))
+                            ],
+                          ),
+                          if (state.hkPathDialog!.error != null)
+                            Text(state.hkPathDialog!.error!)
+                        ],
+                      );
+                    },
+                  ),
+                  actions: [
+                    Button(
+                        child: const Text('Done'),
+                        onPressed: () {
+                          context
+                              .read<MainBloc>()
+                              .add(HKPathProvided(pathController.text));
+                        }),
+                    Button(
+                        child: const Text('Exit'),
+                        onPressed: () => context
+                            .read<MainBloc>()
+                            .add(HKPathDialogDismissed()))
+                  ],
+                ),
               ),
             );
+          } else {
+            Navigator.of(context).pop();
           }
         },
+        listenWhen: (oldState, newState) =>
+            (oldState.hkPathDialog == null) ^ (newState.hkPathDialog == null),
         builder: (context, state) => _navigationView(context, state),
       );
 

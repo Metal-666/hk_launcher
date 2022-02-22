@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hk_launcher/bloc/main/events.dart';
 
 import '../../data/settings/settings_repository.dart';
 import 'events.dart';
@@ -14,5 +15,5 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
     on<LoadingFinished>((event, emit) => emit(LoadingState(true)));
   }
 
-  Future _delayStart() => Future.delayed(const Duration(seconds: 5));
+  Future _delayStart() => Future.delayed(const Duration(seconds: 1));
 }

@@ -10,13 +10,17 @@ class SettingsRepository {
         return;
       });
 
-  String? get hkPath {
-    String? path = preferences.getString('hk_path');
+  String? get hkPath => preferences.getString(_Settings.hkPath);
 
-    if (path != null && Directory(path + 'Hollow Knight_Data').existsSync()) {
-      return path;
+  set hkPath(String? path) {
+    if (path == null) {
+      preferences.remove(_Settings.hkPath);
     } else {
-      return null;
+      preferences.setString(_Settings.hkPath, path);
     }
   }
+}
+
+class _Settings {
+  static const String hkPath = 'hk_path';
 }

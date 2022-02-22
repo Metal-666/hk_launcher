@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc:
+  file_picker:
   fluent_ui:
   shared_preferences:
   go_router:
