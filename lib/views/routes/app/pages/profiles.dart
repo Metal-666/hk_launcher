@@ -2,9 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hk_launcher/bloc/profiles/events.dart';
 
-import '../../bloc/profiles/bloc.dart';
-import '../../bloc/profiles/state.dart';
-import '../../data/settings/settings_repository.dart';
+import '../../../../bloc/profiles/bloc.dart';
+import '../../../../bloc/profiles/state.dart';
+import '../../../../data/settings/settings_repository.dart';
 
 class ProfilesPage extends StatelessWidget {
   const ProfilesPage({Key? key}) : super(key: key);

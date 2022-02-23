@@ -15,8 +15,8 @@ import 'bloc/main/bloc.dart';
 import 'bloc/main/events.dart';
 import 'bloc/main/state.dart';
 import 'data/settings/settings_repository.dart';
-import 'views/pages/profiles.dart';
-import 'views/pages/settings.dart';
+import 'views/routes/app/app.dart';
+import 'views/routes/loading/loading.dart';
 
 final GoRouter _router = GoRouter(
   initialLocation: '/loading',
@@ -31,7 +31,7 @@ final GoRouter _router = GoRouter(
         home: BlocProvider(
           create: (context) =>
               MainBloc(context.read<SettingsRepository>())..add(AppLoaded()),
-          child: const MainPage(),
+          child: const AppPage(),
         ),
       ),
     ),
@@ -72,76 +72,4 @@ Future<void> main() async {
       color: SystemTheme.accentInstance.accent.toAccentColor(),
     ),
   ));
-}
-
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(context) => BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) => _navigationView(context, state),
-      );
-
-  NavigationView _navigationView(BuildContext context, MainState state) =>
-      NavigationView(
-          content: NavigationBody(
-            index: state.navIndex,
-            children: const <Widget>[ProfilesPage(), SettingsPage()],
-          ),
-          pane: NavigationPane(
-              footerItems: <NavigationPaneItem>[
-                PaneItem(
-                    icon: const Icon(FluentIcons.settings),
-                    title: const Text('Settings'))
-              ],
-              selected: state.navIndex,
-              onChanged: (int index) =>
-                  context.read<MainBloc>().add(Navigate(index)),
-              items: <NavigationPaneItem>[
-                PaneItem(
-                    icon: const Icon(FluentIcons.project_collection),
-                    title: const Text('Profiles'))
-              ]));
-}
-
-class LoadingPage extends StatelessWidget {
-  const LoadingPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => BlocListener<LoadingBloc, LoadingState>(
-        listener: (context, state) {
-          if (state.loaded) {
-            GoRouter.of(context).go('/');
-          }
-        },
-        child: CustomSingleChildLayout(
-            delegate: LoadingPageProgressLayoutDelegate(fraction: 3),
-            child: const ProgressRing()),
-      );
-}
-
-class LoadingPageProgressLayoutDelegate extends SingleChildLayoutDelegate {
-  Size? lastSize;
-  int fraction;
-
-  LoadingPageProgressLayoutDelegate({required this.fraction});
-
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    double side = constraints.biggest.shortestSide / fraction;
-    return BoxConstraints.expand(width: side, height: side);
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) => Offset(
-      (size.width / 2) - (childSize.width / 2),
-      (size.height / 2) - (childSize.height / 2));
-
-  @override
-  Size getSize(BoxConstraints constraints) => lastSize = constraints.biggest;
-
-  @override
-  bool shouldRelayout(
-          covariant LoadingPageProgressLayoutDelegate oldDelegate) =>
-      oldDelegate.lastSize != lastSize;
 }

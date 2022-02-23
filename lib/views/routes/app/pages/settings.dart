@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hk_launcher/data/settings/settings_repository.dart';
 
-import '../../bloc/settings/bloc.dart';
-import '../../bloc/settings/events.dart';
-import '../../bloc/settings/state.dart';
-import '../../util/converters.dart';
+import '../../../../bloc/settings/bloc.dart';
+import '../../../../bloc/settings/events.dart';
+import '../../../../bloc/settings/state.dart';
+import '../../../../util/converters.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
