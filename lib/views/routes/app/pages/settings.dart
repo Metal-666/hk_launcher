@@ -9,6 +9,7 @@ import '../../../../bloc/settings/bloc.dart';
 import '../../../../bloc/settings/events.dart';
 import '../../../../bloc/settings/state.dart';
 import '../../../../util/converters.dart';
+import '../../../../util/extensions.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -47,8 +48,9 @@ class SettingsPage extends StatelessWidget {
                               .add(ThemeModeChanged(mode));
                         }
                       },
-                      content:
-                          Text(themeModeConverter.inverse[mode] ?? 'ERROR'),
+                      content: Text(
+                          themeModeConverter.inverse[mode]?.toCapitalized() ??
+                              'ERROR'),
                     ),
                   );
                 },

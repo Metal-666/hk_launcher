@@ -22,6 +22,13 @@ class AppPage extends StatelessWidget {
             children: const <Widget>[ProfilesPage(), SettingsPage()],
           ),
           pane: NavigationPane(
+              header: Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Text(
+                  'HK LAUNCHER',
+                  style: FluentTheme.of(context).typography.title,
+                ),
+              ),
               footerItems: <NavigationPaneItem>[
                 PaneItem(
                     icon: const Icon(FluentIcons.settings),
