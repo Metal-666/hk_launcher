@@ -2,25 +2,23 @@ import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../bloc/profiles/state.dart';
+
 class SettingsRepository {
   late SharedPreferences preferences;
 
   Future init() => SharedPreferences.getInstance().then((preferences) {
         this.preferences = preferences;
-        return;
       });
 
-  String? get hkPath => preferences.getString(_Settings.hkPath);
+  List<String> get profiles =>
+      preferences.getStringList(_Settings.profiles) ?? <String>[];
 
-  set hkPath(String? path) {
-    if (path == null) {
-      preferences.remove(_Settings.hkPath);
-    } else {
-      preferences.setString(_Settings.hkPath, path);
-    }
+  set profiles(List<String>? profiles) {
+    preferences.setStringList(_Settings.profiles, profiles ?? <String>[]);
   }
 }
 
 class _Settings {
-  static const String hkPath = 'hk_path';
+  static const String profiles = 'profiles';
 }

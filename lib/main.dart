@@ -14,6 +14,8 @@ import 'bloc/main/bloc.dart';
 import 'bloc/main/events.dart';
 import 'bloc/main/state.dart';
 import 'data/settings/settings_repository.dart';
+import 'views/pages/profiles.dart';
+import 'views/pages/settings.dart';
 
 final GoRouter _router = GoRouter(
   initialLocation: '/loading',
@@ -67,69 +69,7 @@ class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(context) => BlocConsumer<MainBloc, MainState>(
-        listener: (context, state) {
-          if (state.hkPathDialog != null) {
-            final TextEditingController pathController =
-                TextEditingController();
-
-            showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                value: context.read<MainBloc>(),
-                child: ContentDialog(
-                  title: const Text('Hollow Knight location'),
-                  backgroundDismiss: false,
-                  content: BlocConsumer<MainBloc, MainState>(
-                    listener: (context, state) {
-                      pathController.text = state.hkPathDialog!.path ?? '';
-                    },
-                    builder: (context, state) {
-                      return Column(
-                        children: <Widget>[
-                          const Text(
-                              'Please provide the path to the Hollow Knight directory.'),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextBox(controller: pathController),
-                              ),
-                              FilledButton(
-                                  child: const Text('Browse'),
-                                  onPressed: () => context
-                                      .read<MainBloc>()
-                                      .add(PickHKFolder()))
-                            ],
-                          ),
-                          if (state.hkPathDialog!.error != null)
-                            Text(state.hkPathDialog!.error!)
-                        ],
-                      );
-                    },
-                  ),
-                  actions: [
-                    Button(
-                        child: const Text('Done'),
-                        onPressed: () {
-                          context
-                              .read<MainBloc>()
-                              .add(HKPathProvided(pathController.text));
-                        }),
-                    Button(
-                        child: const Text('Exit'),
-                        onPressed: () => context
-                            .read<MainBloc>()
-                            .add(HKPathDialogDismissed()))
-                  ],
-                ),
-              ),
-            );
-          } else {
-            Navigator.of(context).pop();
-          }
-        },
-        listenWhen: (oldState, newState) =>
-            (oldState.hkPathDialog == null) ^ (newState.hkPathDialog == null),
+  Widget build(context) => BlocBuilder<MainBloc, MainState>(
         builder: (context, state) => _navigationView(context, state),
       );
 
@@ -137,14 +77,7 @@ class MainPage extends StatelessWidget {
       NavigationView(
           content: NavigationBody(
             index: state.navIndex,
-            children: const <Widget>[
-              ScaffoldPage(
-                content: Text('lol1'),
-              ),
-              ScaffoldPage(
-                content: Text('lol2'),
-              )
-            ],
+            children: const <Widget>[ProfilesPage(), SettingsPage()],
           ),
           pane: NavigationPane(
               footerItems: <NavigationPaneItem>[
