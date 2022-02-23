@@ -81,19 +81,24 @@ class ProfilesPage extends StatelessWidget {
               Navigator.of(context).pop();
             }
           },
-          builder: (context, state) => TabView(
-            currentIndex: state.tabIndex,
-            onChanged: (index) =>
-                context.read<ProfilesBloc>().add(ChangeTab(index)),
-            onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
-            closeButtonVisibility: CloseButtonVisibilityMode.never,
-            tabs: state.profiles
-                .map<Tab>((Profile profile) =>
-                    Tab(text: Text(profile.name ?? 'CORRUPT')))
-                .toList(),
-            bodies: state.profiles
-                .map<Text>((Profile profile) => Text(profile.name ?? 'CORRUPT'))
-                .toList(),
+          builder: (context, state) => ScaffoldPage(
+            header: const PageHeader(title: Text('Profiles')),
+            content: TabView(
+              currentIndex: state.tabIndex,
+              onChanged: (index) =>
+                  context.read<ProfilesBloc>().add(ChangeTab(index)),
+              onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
+              closeButtonVisibility: CloseButtonVisibilityMode.never,
+              tabs: state.profiles
+                  .map<Tab>((Profile profile) =>
+                      Tab(text: Text(profile.name ?? 'CORRUPT')))
+                  .toList(),
+              bodies: state.profiles
+                  .map<Widget>((Profile profile) => SizedBox.expand(
+                        child: Text(profile.name ?? 'CORRUPT'),
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       );

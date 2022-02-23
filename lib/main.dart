@@ -5,6 +5,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hk_launcher/util/converters.dart';
 import 'package:system_theme/system_theme.dart';
 
 import 'bloc/loading/bloc.dart';
@@ -22,17 +23,27 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => BlocProvider(
-        create: (context) =>
-            MainBloc(context.read<SettingsRepository>())..add(AppLoaded()),
-        child: const MainPage(),
+      builder: (context, state) => FluentApp(
+        themeMode:
+            themeModeConverter[context.read<SettingsRepository>().themeMode],
+        theme: _createTheme(),
+        darkTheme: _createTheme(darkMode: true),
+        home: BlocProvider(
+          create: (context) =>
+              MainBloc(context.read<SettingsRepository>())..add(AppLoaded()),
+          child: const MainPage(),
+        ),
       ),
     ),
     GoRoute(
       path: '/loading',
-      builder: (context, state) => BlocProvider(
-        create: (context) => LoadingBloc(context.read<SettingsRepository>()),
-        child: const LoadingPage(),
+      builder: (context, state) => FluentApp(
+        themeMode: ThemeMode.dark,
+        darkTheme: _createTheme(darkMode: true),
+        home: BlocProvider(
+          create: (context) => LoadingBloc(context.read<SettingsRepository>()),
+          child: const LoadingPage(),
+        ),
       ),
     ),
   ],
@@ -54,10 +65,8 @@ Future<void> main() async {
 
   runApp(RepositoryProvider(
     create: (context) => SettingsRepository(),
-    child: FluentApp.router(
+    child: WidgetsApp.router(
       title: 'hk_launcher',
-      theme: _createTheme(),
-      darkTheme: _createTheme(darkMode: true),
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       color: SystemTheme.accentInstance.accent.toAccentColor(),

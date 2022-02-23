@@ -17,8 +17,17 @@ class SettingsRepository {
   set profiles(List<String>? profiles) {
     preferences.setStringList(_Settings.profiles, profiles ?? <String>[]);
   }
+
+  String? get themeMode => preferences.getString('themeMode');
+  set themeMode(String? themeMode) {
+    if (themeMode == null) {
+      preferences.remove(_Settings.themeMode);
+    } else {
+      preferences.setString(_Settings.themeMode, themeMode);
+    }
+  }
 }
 
 class _Settings {
-  static const String profiles = 'profiles';
+  static const String profiles = 'profiles', themeMode = 'themeMode';
 }
