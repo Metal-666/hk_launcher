@@ -22,30 +22,42 @@ final GoRouter _router = GoRouter(
   initialLocation: '/loading',
   routes: [
     GoRoute(
-      path: '/',
-      builder: (context, state) => FluentApp(
-        themeMode:
-            themeModeConverter[context.read<SettingsRepository>().themeMode],
-        theme: _createTheme(),
-        darkTheme: _createTheme(darkMode: true),
-        home: BlocProvider(
-          create: (context) =>
-              MainBloc(context.read<SettingsRepository>())..add(AppLoaded()),
-          child: const AppPage(),
-        ),
-      ),
-    ),
+        path: '/',
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: FluentApp(
+                themeMode: themeModeConverter[
+                    context.read<SettingsRepository>().themeMode],
+                theme: _createTheme(),
+                darkTheme: _createTheme(darkMode: true),
+                home: BlocProvider(
+                  create: (context) =>
+                      MainBloc(context.read<SettingsRepository>())
+                        ..add(AppLoaded()),
+                  child: const AppPage(),
+                ),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            )),
     GoRoute(
-      path: '/loading',
-      builder: (context, state) => FluentApp(
-        themeMode: ThemeMode.dark,
-        darkTheme: _createTheme(darkMode: true),
-        home: BlocProvider(
-          create: (context) => LoadingBloc(context.read<SettingsRepository>()),
-          child: const LoadingPage(),
-        ),
-      ),
-    ),
+        path: '/loading',
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: FluentApp(
+                themeMode: ThemeMode.dark,
+                darkTheme: _createTheme(darkMode: true),
+                home: BlocProvider(
+                  create: (context) =>
+                      LoadingBloc(context.read<SettingsRepository>()),
+                  child: const LoadingPage(),
+                ),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            )),
   ],
 );
 

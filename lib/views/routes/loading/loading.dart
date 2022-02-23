@@ -15,9 +15,11 @@ class LoadingPage extends StatelessWidget {
             GoRouter.of(context).go('/');
           }
         },
-        child: CustomSingleChildLayout(
-            delegate: LoadingPageProgressLayoutDelegate(fraction: 3),
-            child: const ProgressRing()),
+        child: ScaffoldPage(
+          content: CustomSingleChildLayout(
+              delegate: LoadingPageProgressLayoutDelegate(fraction: 3),
+              child: const ProgressRing()),
+        ),
       );
 }
 

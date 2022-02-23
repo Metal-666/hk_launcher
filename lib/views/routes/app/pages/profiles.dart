@@ -78,26 +78,39 @@ class ProfilesPage extends StatelessWidget {
                 ),
               );
             } else {
-              Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).pop();
             }
           },
           builder: (context, state) => ScaffoldPage(
-            header: const PageHeader(title: Text('Profiles')),
-            content: TabView(
-              currentIndex: state.tabIndex,
-              onChanged: (index) =>
-                  context.read<ProfilesBloc>().add(ChangeTab(index)),
-              onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
-              closeButtonVisibility: CloseButtonVisibilityMode.never,
-              tabs: state.profiles
-                  .map<Tab>((Profile profile) =>
-                      Tab(text: Text(profile.name ?? 'CORRUPT')))
-                  .toList(),
-              bodies: state.profiles
-                  .map<Widget>((Profile profile) => SizedBox.expand(
-                        child: Text(profile.name ?? 'CORRUPT'),
-                      ))
-                  .toList(),
+            padding: EdgeInsets.zero,
+            header: Container(
+                color: FluentTheme.of(context).micaBackgroundColor,
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: PageHeader(title: Text('Profiles')),
+                )),
+            content: Container(
+              color: FluentTheme.of(context).micaBackgroundColor,
+              child: TabView(
+                currentIndex: state.tabIndex,
+                onChanged: (index) =>
+                    context.read<ProfilesBloc>().add(ChangeTab(index)),
+                onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
+                closeButtonVisibility: CloseButtonVisibilityMode.never,
+                tabs: state.profiles
+                    .map<Tab>((Profile profile) => Tab(
+                          text: Text(profile.name ?? 'CORRUPT'),
+                        ))
+                    .toList(),
+                bodies: state.profiles
+                    .map<Widget>((Profile profile) => SizedBox.expand(
+                          child: Container(
+                              color: FluentTheme.of(context)
+                                  .scaffoldBackgroundColor,
+                              child: Text(profile.name ?? 'CORRUPT')),
+                        ))
+                    .toList(),
+              ),
             ),
           ),
         ),
