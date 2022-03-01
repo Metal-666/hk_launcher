@@ -18,7 +18,7 @@ class ProfilesPage extends StatelessWidget {
           listenWhen: (oldState, newState) =>
               (oldState.newProfile == null) ^ (newState.newProfile == null),
           listener: (context, state) {
-            if (state.newProfile != null) {
+            /*if (state.newProfile != null) {
               final TextEditingController nameController =
                       TextEditingController(),
                   pathController = TextEditingController();
@@ -81,7 +81,7 @@ class ProfilesPage extends StatelessWidget {
               );
             } else {
               Navigator.of(context, rootNavigator: true).pop();
-            }
+            }*/
           },
           builder: (context, state) => ScaffoldPage(
             padding: EdgeInsets.zero,
@@ -98,35 +98,56 @@ class ProfilesPage extends StatelessWidget {
                     context.read<ProfilesBloc>().add(ChangeTab(index)),
                 onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
                 closeButtonVisibility: CloseButtonVisibilityMode.never,
+                footer: Tooltip(
+                  message: 'Synchronize filesystem with current profile',
+                  child: TextButton(
+                    child: Row(
+                      children: const <Widget>[
+                        Icon(FluentIcons.sync),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text('Sync'),
+                        )
+                      ],
+                    ),
+                    onPressed: state.currentProfile == null ? null : () {},
+                  ),
+                ),
                 tabs: state.profiles
-                    .map<Tab>((Profile profile) => Tab(
-                          text: Text(profile.name ?? 'CORRUPT'),
-                        ))
+                    .map<Tab>((Profile profile) => _tab(state, profile))
                     .toList(),
                 bodies: state.profiles
-                    .map<Widget>((Profile profile) => SizedBox.expand(
-                          child: Container(
-                              color: FluentTheme.of(context)
-                                  .scaffoldBackgroundColor,
-                              child: SingleChildScrollView(
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                    Text(profile.name ?? 'CORRUPT'),
-                                    Expander(
-                                        header: const Text('Other'),
-                                        content: FilledButton(
-                                            child: const Text('Delete'),
-                                            onPressed: () => context
-                                                .read<ProfilesBloc>()
-                                                .add(DeleteProfile(profile))))
-                                  ]))),
-                        ))
+                    .map<Widget>(
+                        (Profile profile) => _tabBody(context, profile))
                     .toList(),
               ),
             ),
           ),
         ),
+      );
+  Tab _tab(ProfilesState state, Profile profile) => Tab(
+        icon: profile.name == state.currentProfile
+            ? const Icon(FluentIcons.accept)
+            : null,
+        text: Text(profile.name ?? 'CORRUPT'),
+      );
+
+  Widget _tabBody(BuildContext context, Profile profile) => SizedBox.expand(
+        child: Container(
+            color: FluentTheme.of(context).scaffoldBackgroundColor,
+            child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                  InfoLabel(label: profile.name ?? 'CORRUPT'),
+                  ListView(),
+                  Expander(
+                      header: const Text('Delete this profile?'),
+                      content: FilledButton(
+                          child: const Text('Yes please'),
+                          onPressed: () => context
+                              .read<ProfilesBloc>()
+                              .add(DeleteProfile(profile))))
+                ]))),
       );
 }

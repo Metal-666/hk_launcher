@@ -16,7 +16,8 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
             0,
             _settingsRepository.profiles
                 .map<Profile>((profile) => Profile.fromJson(profile))
-                .toList())) {
+                .toList(),
+            currentProfile: _settingsRepository.currentProfile)) {
     on<ChangeTab>(
         (event, emit) => emit(state.copyWith(tabIndex: () => event.index)));
     on<AddTab>(
@@ -80,6 +81,11 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
   String? _validateProfileName(String? name) {
     if (name == null || name.isEmpty) {
       return 'Profile name cant be empty';
+    }
+    if (state.profiles
+        .where((Profile profile) => profile.name == name)
+        .isNotEmpty) {
+      return 'A profile with this name already exists';
     }
     return null;
   }

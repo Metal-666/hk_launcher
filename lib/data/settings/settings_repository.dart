@@ -19,6 +19,7 @@ class SettingsRepository {
   }
 
   String? get themeMode => preferences.getString('themeMode');
+
   set themeMode(String? themeMode) {
     if (themeMode == null) {
       preferences.remove(_Settings.themeMode);
@@ -26,8 +27,20 @@ class SettingsRepository {
       preferences.setString(_Settings.themeMode, themeMode);
     }
   }
+
+  String? get currentProfile => preferences.getString('currentProfile');
+
+  set currentProfile(String? currentProfile) {
+    if (currentProfile == null) {
+      preferences.remove(_Settings.currentProfile);
+    } else {
+      preferences.setString(_Settings.currentProfile, currentProfile);
+    }
+  }
 }
 
 class _Settings {
-  static const String profiles = 'profiles', themeMode = 'themeMode';
+  static const String profiles = 'profiles',
+      themeMode = 'themeMode',
+      currentProfile = 'currentProfile';
 }
