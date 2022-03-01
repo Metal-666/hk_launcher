@@ -85,15 +85,14 @@ class ProfilesPage extends StatelessWidget {
           },
           builder: (context, state) => ScaffoldPage(
             padding: EdgeInsets.zero,
-            header: Container(
-                color: FluentTheme.of(context).micaBackgroundColor,
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: PageHeader(title: Text('Profiles')),
-                )),
-            content: Container(
-              color: FluentTheme.of(context).micaBackgroundColor,
+            header: const Mica(
+                child: Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: PageHeader(title: Text('Profiles')),
+            )),
+            content: Mica(
               child: TabView(
+                wheelScroll: true,
                 currentIndex: state.tabIndex,
                 onChanged: (index) =>
                     context.read<ProfilesBloc>().add(ChangeTab(index)),
@@ -109,7 +108,20 @@ class ProfilesPage extends StatelessWidget {
                           child: Container(
                               color: FluentTheme.of(context)
                                   .scaffoldBackgroundColor,
-                              child: Text(profile.name ?? 'CORRUPT')),
+                              child: SingleChildScrollView(
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: <Widget>[
+                                    Text(profile.name ?? 'CORRUPT'),
+                                    Expander(
+                                        header: const Text('Other'),
+                                        content: FilledButton(
+                                            child: const Text('Delete'),
+                                            onPressed: () => context
+                                                .read<ProfilesBloc>()
+                                                .add(DeleteProfile(profile))))
+                                  ]))),
                         ))
                     .toList(),
               ),

@@ -1,3 +1,5 @@
+import 'state.dart';
+
 abstract class ProfilesEvent {}
 
 class ChangeTab extends ProfilesEvent {
@@ -17,3 +19,9 @@ class SubmitNewTabDialog extends ProfilesEvent {
 }
 
 class PickHKFolder extends ProfilesEvent {}
+
+class DeleteProfile extends ProfilesEvent {
+  Profile profile;
+
+  DeleteProfile(this.profile);
+}

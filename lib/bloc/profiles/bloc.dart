@@ -49,6 +49,16 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
                 nameError: () => nameError, pathError: () => pathError)));
       }
     });
+    on<DeleteProfile>((event, emit) {
+      ProfilesState newState = state.copyWith(
+          profiles: () => List.of(state.profiles)..remove(event.profile));
+      if (newState.tabIndex == newState.profiles.length) {
+        newState = newState.copyWith(tabIndex: () => newState.tabIndex - 1);
+      }
+      emit(newState);
+      _settingsRepository.profiles =
+          state.profiles.map<String>((profile) => profile.toJson()).toList();
+    });
   }
 
   String? _validateHKPath(String? path) {
