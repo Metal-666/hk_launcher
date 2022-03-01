@@ -30,7 +30,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       }
     });
     on<CloseNewTabDialog>(
-        (event, emit) => state.copyWith(newProfile: () => null));
+        (event, emit) => emit(state.copyWith(newProfile: () => null)));
     on<SubmitNewTabDialog>((event, emit) {
       String? nameError = _validateProfileName(event.name);
       String? pathError = _validateHKPath(event.path);
