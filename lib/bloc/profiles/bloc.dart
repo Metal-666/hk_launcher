@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:hk_launcher/util/extensions.dart';
 import 'package:path/path.dart';
 
 import '../../data/settings/settings_repository.dart';
+import '../../util/hollow_knight.dart';
 import 'events.dart';
 import 'state.dart';
 
@@ -41,30 +43,46 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         newProfile: () =>
             state.newProfile?.copyWith(hkVersion: () => event.version))));
     on<SubmitNewTabDialog>((event, emit) async {
-      String? nameError = _validateProfileName(state.newProfile?.name);
-      String? pathError = _validateHKPath(
-          state.newProfile?.hkPath, state.newProfile?.hkVersion ?? -1);
+      final String? rootPath = state.newProfile?.hkPath,
+          name = state.newProfile?.name;
+      final int? version = state.newProfile?.hkVersion;
+
+      String? nameError = _validateProfileName(name);
+      String? pathError = _validateHKPath(rootPath, version ?? -1);
 
       if (nameError == null && pathError == null) {
         emit(state.copyWith(isNewProfileInitializing: () => true));
+
         try {
-          Directory modpacksDir =
-              Directory(join(state.newProfile!.hkPath!, 'Modpacks', 'Vanilla'));
-          await modpacksDir.create(recursive: true);
+          Directory vanillaModpackDir = Directory(
+              join(hkModpacksPath(state.newProfile!.hkPath!), 'Vanilla'));
+
+          await vanillaModpackDir.create(recursive: true);
+          await Directory(hkManagedPath(rootPath!, version!))
+              .move(hkModpackManagedPath(rootPath, 'Vanilla'));
+          await Directory(hkSavesPath())
+              .move(hkModpackSavesPath(rootPath, 'Vanilla'));
+          await Link(hkManagedPath(rootPath, version))
+              .create(hkModpackManagedPath(rootPath, 'Vanilla'));
+          await Link(hkSavesPath())
+              .create(hkModpackSavesPath(rootPath, 'Vanilla'));
+
+          Profile newProfile =
+              Profile(name: name, hkPath: rootPath, hkVersion: version);
+          emit(state.copyWith(
+              newProfile: () => null,
+              isNewProfileInitializing: () => false,
+              profiles: () => List.of(state.profiles)..add(newProfile)));
+
+          _settingsRepository.profiles = state.profiles
+              .map<String>((profile) => profile.toJson())
+              .toList();
         } on FileSystemException catch (exception) {
           emit(state.copyWith(
               isNewProfileInitializing: () => false,
               newProfileError: () =>
                   exception.osError?.message ?? 'Unknown error'));
         }
-        //Directory(join(event.path), '')
-        /*Profile newProfile = Profile(name: event.name, hkPath: event.path);
-        emit(state.copyWith(
-            newProfile: () => null,
-            profiles: () => List.of(state.profiles)..add(newProfile)));
-
-        _settingsRepository.profiles =
-            state.profiles.map<String>((profile) => profile.toJson()).toList();*/
       } else {
         emit(state.copyWith(
             newProfile: () => state.newProfile?.copyWith(
@@ -96,27 +114,9 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         .isNotEmpty) {
       return 'A profile at this path already exists';
     }
-    switch (version) {
-      case -1:
-        {
-          return 'Something went terribly wrong';
-        }
-      case 14:
-        {
-          if (!File(join(path, 'hollow_knight.exe')).existsSync() ||
-              !Directory(join(path, 'hollow_knight_Data')).existsSync()) {
-            return 'Provided directory is not a valid Hollow Knight 1.4 directory';
-          }
-          break;
-        }
-      case 15:
-        {
-          if (!File(join(path, 'Hollow Knight.exe')).existsSync() ||
-              !Directory(join(path, 'Hollow Knight_Data')).existsSync()) {
-            return 'Provided directory is not a valid Hollow Knight 1.5 directory';
-          }
-          break;
-        }
+    if (!File(hkExePath(path, version)).existsSync() ||
+        !Directory(hkDataPath(path, version)).existsSync()) {
+      return 'Provided directory is not a valid Hollow Knight directory for selected version';
     }
     return null;
   }
