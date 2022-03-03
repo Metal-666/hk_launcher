@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hk_launcher/bloc/profiles/events.dart';
+import 'package:hk_launcher/views/routes/app/dialogs/new_profile.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/state.dart';
@@ -18,70 +19,18 @@ class ProfilesPage extends StatelessWidget {
           listenWhen: (oldState, newState) =>
               (oldState.newProfile == null) ^ (newState.newProfile == null),
           listener: (context, state) {
-            /*if (state.newProfile != null) {
-              final TextEditingController nameController =
-                      TextEditingController(),
-                  pathController = TextEditingController();
-
+            if (state.newProfile != null) {
               showDialog(
                 context: context,
+                useRootNavigator: false,
                 builder: (_) => BlocProvider.value(
                   value: context.read<ProfilesBloc>(),
-                  child: ContentDialog(
-                    title: const Text('New profile'),
-                    backgroundDismiss: false,
-                    content: BlocConsumer<ProfilesBloc, ProfilesState>(
-                      listener: (context, state) {
-                        pathController.text = state.newProfile?.hkPath ?? '';
-                      },
-                      builder: (context, state) => Column(
-                        children: <Widget>[
-                          TextFormBox(
-                            controller: nameController,
-                            autovalidateMode: AutovalidateMode.always,
-                            validator: (_) => state.newProfile?.nameError,
-                            placeholder: 'Profile name',
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextFormBox(
-                                    controller: pathController,
-                                    autovalidateMode: AutovalidateMode.always,
-                                    validator: (_) =>
-                                        state.newProfile?.pathError,
-                                    placeholder:
-                                        'Hollow Knight installation path'),
-                              ),
-                              FilledButton(
-                                  child: const Text('Browse'),
-                                  onPressed: () => context
-                                      .read<ProfilesBloc>()
-                                      .add(PickHKFolder()))
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      Button(
-                          child: const Text('Done'),
-                          onPressed: () {
-                            context.read<ProfilesBloc>().add(SubmitNewTabDialog(
-                                nameController.text, pathController.text));
-                          }),
-                      Button(
-                          child: const Text('Cancel'),
-                          onPressed: () => context
-                              .read<ProfilesBloc>()
-                              .add(CloseNewTabDialog()))
-                    ],
-                  ),
+                  child: const NewProfileDialog(),
                 ),
               );
             } else {
-              Navigator.of(context, rootNavigator: true).pop();
-            }*/
+              Navigator.of(context).pop();
+            }
           },
           builder: (context, state) => ScaffoldPage(
             padding: EdgeInsets.zero,
@@ -125,6 +74,7 @@ class ProfilesPage extends StatelessWidget {
           ),
         ),
       );
+
   Tab _tab(ProfilesState state, Profile profile) => Tab(
         icon: profile.name == state.currentProfile
             ? const Icon(FluentIcons.accept)
@@ -140,7 +90,7 @@ class ProfilesPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                   InfoLabel(label: profile.name ?? 'CORRUPT'),
-                  ListView(),
+                  //ListView(children: ),
                   Expander(
                       header: const Text('Delete this profile?'),
                       content: FilledButton(

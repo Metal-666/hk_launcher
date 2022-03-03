@@ -1,7 +1,7 @@
 abstract class MainEvent {}
 
 class Navigate extends MainEvent {
-  int index;
+  final int index;
 
   Navigate(this.index);
 }

@@ -3,7 +3,7 @@ import 'state.dart';
 abstract class ProfilesEvent {}
 
 class ChangeTab extends ProfilesEvent {
-  int index;
+  final int index;
 
   ChangeTab(this.index);
 }
@@ -12,16 +12,30 @@ class AddTab extends ProfilesEvent {}
 
 class CloseNewTabDialog extends ProfilesEvent {}
 
-class SubmitNewTabDialog extends ProfilesEvent {
-  String name, path;
-
-  SubmitNewTabDialog(this.name, this.path);
-}
+class SubmitNewTabDialog extends ProfilesEvent {}
 
 class PickHKFolder extends ProfilesEvent {}
 
+class ChangeNewProfileName extends ProfilesEvent {
+  final String name;
+
+  ChangeNewProfileName(this.name);
+}
+
+class ChangeNewProfilePath extends ProfilesEvent {
+  final String path;
+
+  ChangeNewProfilePath(this.path);
+}
+
+class ChangeNewProfileVersion extends ProfilesEvent {
+  final int version;
+
+  ChangeNewProfileVersion(this.version);
+}
+
 class DeleteProfile extends ProfilesEvent {
-  Profile profile;
+  final Profile profile;
 
   DeleteProfile(this.profile);
 }

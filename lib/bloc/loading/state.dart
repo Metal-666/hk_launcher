@@ -1,4 +1,5 @@
 class LoadingState {
-  bool loaded;
-  LoadingState(this.loaded);
+  final bool loaded;
+
+  const LoadingState(this.loaded);
 }

@@ -1,7 +1,7 @@
 class MainState {
-  int navIndex;
+  final int navIndex;
 
-  MainState(this.navIndex);
+  const MainState(this.navIndex);
 
   MainState copyWith({int Function()? navIndex}) =>
       MainState(navIndex == null ? this.navIndex : navIndex.call());
