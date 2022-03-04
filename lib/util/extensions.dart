@@ -16,7 +16,7 @@ extension DirectoryExtension on Directory {
   Future<Directory> move(String path) async {
     await for (final element in list(recursive: true)) {
       if (element is File) {
-        File copy =
+        final File copy =
             File(join(path, element.path.substring(this.path.length + 1)));
         await copy.parent.create(recursive: true);
         await element.copy(copy.path);

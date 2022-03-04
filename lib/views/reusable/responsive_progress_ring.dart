@@ -18,7 +18,7 @@ class _LayoutDelegate extends SingleChildLayoutDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    double side = constraints.biggest.shortestSide / fraction;
+    final double side = constraints.biggest.shortestSide / fraction;
     return BoxConstraints.expand(width: side, height: side);
   }
 

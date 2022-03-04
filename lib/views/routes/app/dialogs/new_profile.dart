@@ -14,13 +14,13 @@ class NewProfileDialog extends StatelessWidget {
       BlocBuilder<ProfilesBloc, ProfilesState>(
         builder: (context, state) => state.isNewProfileInitializing
             ? const ResponsiveProgressRing()
-            : state.newProfileError != null
+            : state.newProfile?.profileError != null
                 ? ContentDialog(
                     title:
                         const Text('Error occured when creating this profile'),
                     backgroundDismiss: false,
                     content: Text(
-                      state.newProfileError!,
+                      state.newProfile!.profileError!,
                       style: FluentTheme.of(context).typography.bodyLarge,
                     ),
                     actions: <Widget>[
@@ -100,7 +100,7 @@ class NewProfileDialog extends StatelessWidget {
       );
 
   String _hkVersionToString(int version) {
-    String versionText = version.toString();
+    final String versionText = version.toString();
     return versionText[0] + '.' + versionText.substring(1);
   }
 }

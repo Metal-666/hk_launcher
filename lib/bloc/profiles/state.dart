@@ -5,7 +5,6 @@ class ProfilesState {
   final List<Profile> profiles;
   final Profile? newProfile;
   final bool isNewProfileInitializing;
-  final String? newProfileError;
   final String? currentProfile;
 
   final List<int> hkVersions = const <int>[14, 15];
@@ -13,7 +12,6 @@ class ProfilesState {
   const ProfilesState(this.tabIndex, this.profiles,
       {this.newProfile,
       this.isNewProfileInitializing = false,
-      this.newProfileError,
       this.currentProfile});
 
   ProfilesState copyWith(
@@ -29,9 +27,6 @@ class ProfilesState {
           isNewProfileInitializing: isNewProfileInitializing == null
               ? this.isNewProfileInitializing
               : isNewProfileInitializing.call(),
-          newProfileError: newProfileError == null
-              ? this.newProfileError
-              : newProfileError.call(),
           currentProfile: currentProfile == null
               ? this.currentProfile
               : currentProfile.call());
@@ -44,6 +39,8 @@ class Profile {
   final String? nameError;
   final String? pathError;
 
+  final String? profileError;
+
   final int hkVersion;
 
   final List<Modpack> modpacks;
@@ -53,6 +50,7 @@ class Profile {
       this.hkPath,
       this.nameError,
       this.pathError,
+      this.profileError,
       this.hkVersion = 14,
       this.modpacks = const []});
 
@@ -61,6 +59,7 @@ class Profile {
           String? Function()? hkPath,
           String? Function()? nameError,
           String? Function()? pathError,
+          String? Function()? profileError,
           int Function()? hkVersion,
           List<Modpack> Function()? modpacks}) =>
       Profile(
@@ -68,6 +67,8 @@ class Profile {
           hkPath: hkPath == null ? this.hkPath : hkPath.call(),
           nameError: nameError == null ? this.nameError : nameError.call(),
           pathError: pathError == null ? this.pathError : pathError.call(),
+          profileError:
+              profileError == null ? this.profileError : profileError.call(),
           hkVersion: hkVersion == null ? this.hkVersion : hkVersion.call(),
           modpacks: modpacks == null ? this.modpacks : modpacks.call());
 
@@ -84,5 +85,7 @@ class Profile {
 }
 
 class Modpack {
-  String? name;
+  final String name;
+
+  Modpack(this.name);
 }

@@ -8,7 +8,7 @@ import 'events.dart';
 import 'state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsRepository _settingsRepository;
+  final SettingsRepository _settingsRepository;
 
   SettingsBloc(this._settingsRepository)
       : super(SettingsState(

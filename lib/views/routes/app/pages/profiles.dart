@@ -84,20 +84,34 @@ class ProfilesPage extends StatelessWidget {
 
   Widget _tabBody(BuildContext context, Profile profile) => SizedBox.expand(
         child: Container(
+            padding: const EdgeInsets.all(8),
             color: FluentTheme.of(context).scaffoldBackgroundColor,
             child: SingleChildScrollView(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                  InfoLabel(label: profile.name ?? 'CORRUPT'),
-                  //ListView(children: ),
-                  Expander(
-                      header: const Text('Delete this profile?'),
-                      content: FilledButton(
-                          child: const Text('Yes please'),
-                          onPressed: () => context
-                              .read<ProfilesBloc>()
-                              .add(DeleteProfile(profile))))
+                  Text(
+                    profile.name ?? 'CORRUPT',
+                    style: FluentTheme.of(context).typography.subtitle,
+                  ),
+                  InfoLabel(
+                      label: 'Modpacks',
+                      child: Card(
+                          child: Column(
+                              children: profile.modpacks
+                                  .map<ListTile>((modpack) =>
+                                      ListTile(title: Text(modpack.name)))
+                                  .toList()))),
+                  InfoLabel(
+                    label: 'Manage',
+                    child: Expander(
+                        header: const Text('Delete this profile?'),
+                        content: FilledButton(
+                            child: const Text('Yes please'),
+                            onPressed: () => context
+                                .read<ProfilesBloc>()
+                                .add(DeleteProfile(profile)))),
+                  )
                 ]))),
       );
 }

@@ -16,16 +16,36 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
   ProfilesBloc(this._settingsRepository)
       : super(ProfilesState(
             0,
-            _settingsRepository.profiles
-                .map<Profile>((profile) => Profile.fromJson(profile))
-                .toList(),
+            _settingsRepository.profiles.map<Profile>((profileJson) {
+              final Profile profile = Profile.fromJson(profileJson);
+
+              if (profile.hkPath != null || profile.name != null) {
+                final Directory profileDir =
+                    Directory(hkModpacksPath(profile.hkPath!));
+
+                if (profileDir.existsSync()) {
+                  return profile.copyWith(
+                      modpacks: () => profileDir
+                              .listSync()
+                              .whereType<Directory>()
+                              .map<Modpack>((element) {
+                            var modpack = Modpack(basename(element.path));
+                            return modpack;
+                          }).toList());
+                }
+
+                return const Profile(profileError: 'Profile not found!');
+              }
+
+              return const Profile(profileError: 'This profile is corrupted!');
+            }).toList(),
             currentProfile: _settingsRepository.currentProfile)) {
     on<ChangeTab>(
         (event, emit) => emit(state.copyWith(tabIndex: () => event.index)));
     on<AddTab>((event, emit) => emit(state.copyWith(
         newProfile: () => const Profile(), newProfileError: () => null)));
     on<PickHKFolder>((event, emit) async {
-      String? path = await FilePicker.platform.getDirectoryPath();
+      final String? path = await FilePicker.platform.getDirectoryPath();
 
       if (path != null) {
         emit(state.copyWith(
@@ -47,14 +67,14 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
           name = state.newProfile?.name;
       final int? version = state.newProfile?.hkVersion;
 
-      String? nameError = _validateProfileName(name);
-      String? pathError = _validateHKPath(rootPath, version ?? -1);
+      final String? nameError = _validateProfileName(name);
+      final String? pathError = _validateHKPath(rootPath, version ?? -1);
 
       if (nameError == null && pathError == null) {
         emit(state.copyWith(isNewProfileInitializing: () => true));
 
         try {
-          Directory vanillaModpackDir = Directory(
+          final Directory vanillaModpackDir = Directory(
               join(hkModpacksPath(state.newProfile!.hkPath!), 'Vanilla'));
 
           await vanillaModpackDir.create(recursive: true);
@@ -67,7 +87,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
           await Link(hkSavesPath())
               .create(hkModpackSavesPath(rootPath, 'Vanilla'));
 
-          Profile newProfile =
+          final Profile newProfile =
               Profile(name: name, hkPath: rootPath, hkVersion: version);
           emit(state.copyWith(
               newProfile: () => null,
