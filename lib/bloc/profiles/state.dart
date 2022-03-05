@@ -35,6 +35,7 @@ class ProfilesState {
 class Profile {
   final String? name;
   final String? hkPath;
+  final bool shouldOverwritePath;
 
   final String? nameError;
   final String? pathError;
@@ -48,6 +49,7 @@ class Profile {
   const Profile(
       {this.name,
       this.hkPath,
+      this.shouldOverwritePath = false,
       this.nameError,
       this.pathError,
       this.profileError,
@@ -57,6 +59,7 @@ class Profile {
   Profile copyWith(
           {String? Function()? name,
           String? Function()? hkPath,
+          bool Function()? shouldOverwritePath,
           String? Function()? nameError,
           String? Function()? pathError,
           String? Function()? profileError,
@@ -65,6 +68,8 @@ class Profile {
       Profile(
           name: name == null ? this.name : name.call(),
           hkPath: hkPath == null ? this.hkPath : hkPath.call(),
+          shouldOverwritePath:
+              shouldOverwritePath == null ? false : shouldOverwritePath.call(),
           nameError: nameError == null ? this.nameError : nameError.call(),
           pathError: pathError == null ? this.pathError : pathError.call(),
           profileError:

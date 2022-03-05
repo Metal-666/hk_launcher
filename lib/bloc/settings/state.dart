@@ -2,9 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:quiver/collection.dart';
 
 class SettingsState {
-  bool needsRestart;
+  final bool needsRestart;
 
-  ThemeMode themeMode;
+  final ThemeMode themeMode;
 
   SettingsState(this.needsRestart, this.themeMode);
 

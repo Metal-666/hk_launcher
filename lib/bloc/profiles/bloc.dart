@@ -51,7 +51,8 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
       if (path != null) {
         emit(state.copyWith(
-            newProfile: () => state.newProfile?.copyWith(hkPath: () => path)));
+            newProfile: () => state.newProfile?.copyWith(
+                hkPath: () => path, shouldOverwritePath: () => true)));
       }
     });
     on<CloseNewTabDialog>(
