@@ -48,14 +48,14 @@ class ProfilesPage extends StatelessWidget {
                 onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
                 closeButtonVisibility: CloseButtonVisibilityMode.never,
                 footer: Tooltip(
-                  message: 'Synchronize filesystem with current profile',
+                  message: 'Launch current profile',
                   child: TextButton(
                     child: Row(
                       children: const <Widget>[
-                        Icon(FluentIcons.sync),
+                        Icon(FluentIcons.play),
                         Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text('Sync'),
+                          child: Text('Launch'),
                         )
                       ],
                     ),
@@ -63,11 +63,12 @@ class ProfilesPage extends StatelessWidget {
                   ),
                 ),
                 tabs: state.profiles
-                    .map<Tab>((Profile profile) => _tab(state, profile))
+                    .map<Tab>((Profile profile) =>
+                        _tab(profile, state.currentProfile == profile.name))
                     .toList(),
                 bodies: state.profiles
-                    .map<Widget>(
-                        (Profile profile) => _tabBody(context, profile))
+                    .map<Widget>((Profile profile) => _tabBody(
+                        context, profile, state.currentProfile == profile.name))
                     .toList(),
               ),
             ),
@@ -75,14 +76,18 @@ class ProfilesPage extends StatelessWidget {
         ),
       );
 
-  Tab _tab(ProfilesState state, Profile profile) => Tab(
-        icon: profile.name == state.currentProfile
-            ? const Icon(FluentIcons.accept)
+  Tab _tab(Profile profile, bool isCurrent) => Tab(
+        icon: isCurrent
+            ? const Icon(
+                FluentIcons.favorite_star,
+                size: 14,
+              )
             : null,
         text: Text(profile.name ?? 'CORRUPT'),
       );
 
-  Widget _tabBody(BuildContext context, Profile profile) => SizedBox.expand(
+  Widget _tabBody(BuildContext context, Profile profile, bool isCurrent) =>
+      SizedBox.expand(
         child: Container(
             padding: const EdgeInsets.all(8),
             color: FluentTheme.of(context).scaffoldBackgroundColor,
@@ -90,9 +95,22 @@ class ProfilesPage extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                  Text(
-                    profile.name ?? 'CORRUPT',
-                    style: FluentTheme.of(context).typography.subtitle,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          profile.name ?? 'CORRUPT',
+                          style: FluentTheme.of(context).typography.subtitle,
+                        ),
+                      ),
+                      isCurrent
+                          ? const Text('This is your current profile')
+                          : FilledButton(
+                              child: const Text('Make current'),
+                              onPressed: () => context
+                                  .read<ProfilesBloc>()
+                                  .add(MakeProfileCurrent(profile)))
+                    ],
                   ),
                   InfoLabel(
                       label: 'Modpacks',

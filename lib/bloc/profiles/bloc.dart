@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -45,7 +46,8 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
     on<AddTab>((event, emit) => emit(state.copyWith(
         newProfile: () => const Profile(), newProfileError: () => null)));
     on<PickHKFolder>((event, emit) async {
-      final String? path = await FilePicker.platform.getDirectoryPath();
+      final String? path =
+          await FilePicker.platform.getDirectoryPath(lockParentWindow: true);
 
       if (path != null) {
         emit(state.copyWith(
@@ -89,6 +91,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
           final Profile newProfile =
               Profile(name: name, hkPath: rootPath, hkVersion: version);
+
           emit(state.copyWith(
               newProfile: () => null,
               isNewProfileInitializing: () => false,
@@ -119,6 +122,11 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       emit(newState);
       _settingsRepository.profiles =
           state.profiles.map<String>((profile) => profile.toJson()).toList();
+    });
+    on<MakeProfileCurrent>((event, emit) {
+      emit(state.copyWith(currentProfile: () => event.profile.name));
+
+      _settingsRepository.currentProfile = event.profile.name;
     });
   }
 

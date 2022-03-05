@@ -39,3 +39,9 @@ class DeleteProfile extends ProfilesEvent {
 
   DeleteProfile(this.profile);
 }
+
+class MakeProfileCurrent extends ProfilesEvent {
+  final Profile profile;
+
+  MakeProfileCurrent(this.profile);
+}
