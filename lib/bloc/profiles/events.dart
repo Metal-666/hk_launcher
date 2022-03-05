@@ -45,3 +45,10 @@ class MakeProfileCurrent extends ProfilesEvent {
 
   MakeProfileCurrent(this.profile);
 }
+
+class SelectModpack extends ProfilesEvent {
+  final Profile profile;
+  final Modpack modpack;
+
+  SelectModpack(this.profile, this.modpack);
+}

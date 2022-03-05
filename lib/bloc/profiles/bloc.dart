@@ -129,6 +129,18 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
       _settingsRepository.currentProfile = event.profile.name;
     });
+    on<SelectModpack>((event, emit) {
+      if (event.profile.selectedModpack != event.modpack.name) {
+        //
+        //apply modpack
+        //
+
+        emit(state.copyWith(
+            profiles: () => List.of(state.profiles)
+              ..[state.profiles.indexOf(event.profile)] = event.profile
+                  .copyWith(selectedModpack: () => event.modpack.name)));
+      }
+    });
   }
 
   String? _validateHKPath(String? path, int version) {

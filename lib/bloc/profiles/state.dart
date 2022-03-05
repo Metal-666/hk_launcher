@@ -46,6 +46,8 @@ class Profile {
 
   final List<Modpack> modpacks;
 
+  final String selectedModpack;
+
   const Profile(
       {this.name,
       this.hkPath,
@@ -54,7 +56,8 @@ class Profile {
       this.pathError,
       this.profileError,
       this.hkVersion = 14,
-      this.modpacks = const []});
+      this.modpacks = const [],
+      this.selectedModpack = 'Vanilla'});
 
   Profile copyWith(
           {String? Function()? name,
@@ -64,7 +67,8 @@ class Profile {
           String? Function()? pathError,
           String? Function()? profileError,
           int Function()? hkVersion,
-          List<Modpack> Function()? modpacks}) =>
+          List<Modpack> Function()? modpacks,
+          String Function()? selectedModpack}) =>
       Profile(
           name: name == null ? this.name : name.call(),
           hkPath: hkPath == null ? this.hkPath : hkPath.call(),
@@ -75,13 +79,23 @@ class Profile {
           profileError:
               profileError == null ? this.profileError : profileError.call(),
           hkVersion: hkVersion == null ? this.hkVersion : hkVersion.call(),
-          modpacks: modpacks == null ? this.modpacks : modpacks.call());
+          modpacks: modpacks == null ? this.modpacks : modpacks.call(),
+          selectedModpack: selectedModpack == null
+              ? this.selectedModpack
+              : selectedModpack.call());
 
-  Map<String, dynamic> toMap() =>
-      {'name': name, 'hk_path': hkPath, 'hk_version': hkVersion};
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'hk_path': hkPath,
+        'hk_version': hkVersion,
+        'selected_modpack': selectedModpack
+      };
 
   factory Profile.fromMap(Map<String, dynamic> map) => Profile(
-      name: map['name'], hkPath: map['hk_path'], hkVersion: map['hk_version']);
+      name: map['name'],
+      hkPath: map['hk_path'],
+      hkVersion: map['hk_version'],
+      selectedModpack: map['selected_modpack'] ?? 'Vanilla');
 
   String toJson() => json.encode(toMap());
 

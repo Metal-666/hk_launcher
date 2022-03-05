@@ -8,6 +8,7 @@ import 'package:hk_launcher/views/routes/app/dialogs/new_profile.dart';
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../../data/settings/settings_repository.dart';
+import '../../../reusable/icon_text_button.dart';
 
 class ProfilesPage extends StatelessWidget {
   const ProfilesPage({Key? key}) : super(key: key);
@@ -49,18 +50,9 @@ class ProfilesPage extends StatelessWidget {
                 closeButtonVisibility: CloseButtonVisibilityMode.never,
                 footer: Tooltip(
                   message: 'Launch current profile',
-                  child: TextButton(
-                    child: Row(
-                      children: const <Widget>[
-                        Icon(FluentIcons.play),
-                        Padding(
-                          padding: EdgeInsets.only(left: 8),
-                          child: Text('Launch'),
-                        )
-                      ],
-                    ),
-                    onPressed: state.currentProfile == null ? null : () {},
-                  ),
+                  child: IconTextButton(FluentIcons.play, 'Launch',
+                      state.currentProfile == null ? null : () {},
+                      buttonType: ButtonType.text),
                 ),
                 tabs: state.profiles
                     .map<Tab>((Profile profile) =>
@@ -117,8 +109,40 @@ class ProfilesPage extends StatelessWidget {
                       child: Card(
                           child: Column(
                               children: profile.modpacks
-                                  .map<ListTile>((modpack) =>
-                                      ListTile(title: Text(modpack.name)))
+                                  .map<Widget>(
+                                    (modpack) => Row(children: <Widget>[
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8),
+                                        child: IconButton(
+                                          icon: Icon(profile.selectedModpack ==
+                                                  modpack.name
+                                              ? FluentIcons.favorite_star_fill
+                                              : FluentIcons.favorite_star),
+                                          onPressed: () => context
+                                              .read<ProfilesBloc>()
+                                              .add(SelectModpack(
+                                                  profile, modpack)),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Expander(
+                                            header: Text(modpack.name),
+                                            content: Row(
+                                              children: <Widget>[
+                                                IconTextButton(
+                                                    FluentIcons.dependency_add,
+                                                    'Duplicate',
+                                                    () {}),
+                                                IconTextButton(
+                                                    FluentIcons.delete,
+                                                    'Delete',
+                                                    () {})
+                                              ],
+                                            )),
+                                      )
+                                    ]),
+                                  )
                                   .toList()))),
                   InfoLabel(
                     label: 'Manage',
