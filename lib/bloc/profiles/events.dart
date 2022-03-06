@@ -55,9 +55,30 @@ class SelectModpack extends ProfilesEvent {
 
 class CloseModpackErrorDialog extends ProfilesEvent {}
 
+class DuplicateModpack extends ProfilesEvent {
+  final Modpack modpack;
+
+  DuplicateModpack(this.modpack);
+}
+
 class ShowModpackInExplorer extends ProfilesEvent {
   final Profile profile;
   final Modpack modpack;
 
   ShowModpackInExplorer(this.profile, this.modpack);
 }
+
+class SubmitNewModpackDialog extends ProfilesEvent {
+  final Profile profile;
+  final Modpack modpack;
+
+  SubmitNewModpackDialog(this.profile, this.modpack);
+}
+
+class ChangeNewModpackName extends ProfilesEvent {
+  final String name;
+
+  ChangeNewModpackName(this.name);
+}
+
+class CloseNewModpackDialog extends ProfilesEvent {}

@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_acrylic
   system_theme
+  window_size
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

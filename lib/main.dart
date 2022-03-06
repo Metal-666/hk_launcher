@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hk_launcher/util/converters.dart';
 import 'package:system_theme/system_theme.dart';
+import 'package:window_size/window_size.dart';
 
 import 'bloc/loading/bloc.dart';
 import 'bloc/loading/state.dart';
@@ -67,6 +68,9 @@ ThemeData _createTheme({bool darkMode = false}) => ThemeData(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  setWindowMinSize(const Size(384, 384));
+
   await SystemTheme.accentInstance.load();
 
   /*await Window.initialize();

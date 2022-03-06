@@ -9,22 +9,28 @@ class ProfilesState {
 
   final String? modpackLoadError;
 
+  final Modpack? newModpack;
+  final bool isNewModpackInitializing;
+
   final List<int> hkVersions = const <int>[14, 15];
 
   const ProfilesState(this.tabIndex, this.profiles,
       {this.newProfile,
       this.isNewProfileInitializing = false,
       this.currentProfile,
-      this.modpackLoadError});
+      this.modpackLoadError,
+      this.newModpack,
+      this.isNewModpackInitializing = false});
 
   ProfilesState copyWith(
           {int Function()? tabIndex,
           List<Profile> Function()? profiles,
           Profile? Function()? newProfile,
           bool Function()? isNewProfileInitializing,
-          String? Function()? newProfileError,
           String? Function()? currentProfile,
-          String? Function()? modpackLoadError}) =>
+          String? Function()? modpackLoadError,
+          Modpack? Function()? newModpack,
+          bool Function()? isNewModpackInitializing}) =>
       ProfilesState(tabIndex == null ? this.tabIndex : tabIndex.call(),
           profiles == null ? this.profiles : profiles.call(),
           newProfile: newProfile == null ? this.newProfile : newProfile.call(),
@@ -36,7 +42,11 @@ class ProfilesState {
               : currentProfile.call(),
           modpackLoadError: modpackLoadError == null
               ? this.modpackLoadError
-              : modpackLoadError.call());
+              : modpackLoadError.call(),
+          newModpack: newModpack == null ? this.newModpack : newModpack.call(),
+          isNewModpackInitializing: isNewModpackInitializing == null
+              ? this.isNewModpackInitializing
+              : isNewModpackInitializing.call());
 }
 
 class Profile {
@@ -111,7 +121,21 @@ class Profile {
 }
 
 class Modpack {
-  final String name;
+  final String? name;
 
-  Modpack(this.name);
+  final String? nameError;
+
+  final String? basedOn;
+
+  const Modpack({this.name, this.nameError, this.basedOn});
+
+  Modpack copyWith({
+    String Function()? name,
+    String Function()? nameError,
+    String Function()? basedOn,
+  }) =>
+      Modpack(
+          name: name == null ? this.name : name.call(),
+          nameError: nameError == null ? this.nameError : nameError.call(),
+          basedOn: basedOn == null ? this.basedOn : basedOn.call());
 }

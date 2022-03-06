@@ -13,7 +13,7 @@ extension StringCasingExtension on String {
 }
 
 extension DirectoryExtension on Directory {
-  Future<Directory> move(String path) async {
+  Future<Directory> move(String path, {bool deleteSource = false}) async {
     await for (final element in list(recursive: true)) {
       if (element is File) {
         final File copy =
@@ -23,7 +23,9 @@ extension DirectoryExtension on Directory {
       }
     }
 
-    await delete(recursive: true);
+    if (deleteSource) {
+      await delete(recursive: true);
+    }
 
     return Directory(path);
   }
