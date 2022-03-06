@@ -4,17 +4,49 @@ import 'package:go_router/go_router.dart';
 import 'package:hk_launcher/views/reusable/responsive_progress_ring.dart';
 
 import '../../../bloc/loading/bloc.dart';
+import '../../../bloc/loading/events.dart';
 import '../../../bloc/loading/state.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => BlocListener<LoadingBloc, LoadingState>(
+  Widget build(BuildContext context) => BlocConsumer<LoadingBloc, LoadingState>(
       listener: (context, state) {
         if (state.loaded) {
           GoRouter.of(context).go('/');
         }
       },
-      child: const ScaffoldPage(content: ResponsiveProgressRing()));
+      builder: (context, state) => state.disclaimer
+          ? ContentDialog(
+              title: const Text('Read this! [wip]'),
+              backgroundDismiss: false,
+              content: RichText(
+                text: TextSpan(
+                  style: FluentTheme.of(context).typography.bodyLarge,
+                  children: const <InlineSpan>[
+                    TextSpan(text: '- Move save files (will be deleted), use '),
+                    WidgetSpan(child: Icon(FluentIcons.folder)),
+                    TextSpan(text: ' button below.')
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: IconButton(
+                        icon: const Icon(FluentIcons.folder),
+                        onPressed: () =>
+                            context.read<LoadingBloc>().add(OpenSavesFolder())),
+                  ),
+                  Button(
+                    child: const Text('Okay'),
+                    onPressed: () =>
+                        context.read<LoadingBloc>().add(DismissedDisclaimer()),
+                  )
+                ])
+              ],
+            )
+          : const ScaffoldPage(content: ResponsiveProgressRing()));
 }

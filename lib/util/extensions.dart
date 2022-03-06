@@ -22,7 +22,22 @@ extension DirectoryExtension on Directory {
         await element.copy(copy.path);
       }
     }
+
     await delete(recursive: true);
+
     return Directory(path);
+  }
+
+  Future<void> showInExplorer() async =>
+      Process.run('explorer.exe', <String>[path]);
+}
+
+extension LinkExtension on Link {
+  Future<Link> set(String target) async {
+    if (await exists()) {
+      return update(target);
+    } else {
+      return create(target);
+    }
   }
 }

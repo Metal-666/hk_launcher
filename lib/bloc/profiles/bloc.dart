@@ -83,15 +83,19 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
           await vanillaModpackDir.create(recursive: true);
           await Directory(hkManagedPath(rootPath!, version!))
               .move(hkModpackManagedPath(rootPath, 'Vanilla'));
-          await Directory(hkSavesPath())
-              .move(hkModpackSavesPath(rootPath, 'Vanilla'));
-          await Link(hkManagedPath(rootPath, version))
-              .create(hkModpackManagedPath(rootPath, 'Vanilla'));
-          await Link(hkSavesPath())
-              .create(hkModpackSavesPath(rootPath, 'Vanilla'));
+
+          await Directory(hkSavesPath()).delete(recursive: true);
+          //await Directory(hkModpackSavesPath(rootPath, 'Vanilla')).create();
+
+          //await Link(hkManagedPath(rootPath, version)).create(hkModpackManagedPath(rootPath, 'Vanilla'));
+          //await Link(hkSavesPath()).create(hkModpackSavesPath(rootPath, 'Vanilla'));
 
           final Profile newProfile =
               Profile(name: name, hkPath: rootPath, hkVersion: version);
+
+          if (state.profiles.isEmpty) {
+            _selectProfile(newProfile);
+          }
 
           emit(state.copyWith(
               newProfile: () => null,
@@ -129,18 +133,37 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
       _settingsRepository.currentProfile = event.profile.name;
     });
-    on<SelectModpack>((event, emit) {
+    on<SelectModpack>((event, emit) async {
       if (event.profile.selectedModpack != event.modpack.name) {
-        //
-        //apply modpack
-        //
+        Directory savesDir = Directory(hkSavesPath()),
+            managedDir = Directory(
+                hkManagedPath(event.profile.hkPath!, event.profile.hkVersion));
 
-        emit(state.copyWith(
-            profiles: () => List.of(state.profiles)
-              ..[state.profiles.indexOf(event.profile)] = event.profile
-                  .copyWith(selectedModpack: () => event.modpack.name)));
+        if (await savesDir.exists() || await managedDir.exists()) {
+          emit(state.copyWith(
+              modpackLoadError: () =>
+                  'It seems like a part of your HK installation hasn\'t been converted for use with this launcher. Please verify that your installation and save files are not corrupted, delete this profile and create it again.'));
+        } else {
+          try {
+            _selectProfile(event.profile);
+
+            emit(state.copyWith(
+                profiles: () => List.of(state.profiles)
+                  ..[state.profiles.indexOf(event.profile)] = event.profile
+                      .copyWith(selectedModpack: () => event.modpack.name)));
+          } on FileSystemException catch (exception) {
+            emit(state.copyWith(
+                modpackLoadError: () =>
+                    exception.osError?.message ?? 'Unknown error'));
+          }
+        }
       }
     });
+    on<CloseModpackErrorDialog>(
+        (event, emit) => emit(state.copyWith(modpackLoadError: () => null)));
+    on<ShowModpackInExplorer>((event, emit) =>
+        Directory(hkModpackPath(event.profile.hkPath!, event.modpack.name))
+            .showInExplorer());
   }
 
   String? _validateHKPath(String? path, int version) {
@@ -172,5 +195,19 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       return 'A profile with this name already exists';
     }
     return null;
+  }
+
+  void _selectProfile(Profile profile) async {
+    Directory modpackSavesDir =
+        Directory(hkModpackSavesPath(profile.hkPath!, profile.selectedModpack));
+
+    if (!await modpackSavesDir.exists()) {
+      modpackSavesDir.create();
+    }
+
+    Link(hkSavesPath())
+        .set(hkModpackSavesPath(profile.hkPath!, profile.selectedModpack));
+    Link(hkManagedPath(profile.hkPath!, profile.hkVersion))
+        .set(hkModpackManagedPath(profile.hkPath!, profile.selectedModpack));
   }
 }

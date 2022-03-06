@@ -18,7 +18,7 @@ class SettingsRepository {
     preferences.setStringList(_Settings.profiles, profiles ?? <String>[]);
   }
 
-  String? get themeMode => preferences.getString('themeMode');
+  String? get themeMode => preferences.getString(_Settings.themeMode);
 
   set themeMode(String? themeMode) {
     if (themeMode == null) {
@@ -28,7 +28,7 @@ class SettingsRepository {
     }
   }
 
-  String? get currentProfile => preferences.getString('currentProfile');
+  String? get currentProfile => preferences.getString(_Settings.currentProfile);
 
   set currentProfile(String? currentProfile) {
     if (currentProfile == null) {
@@ -37,10 +37,18 @@ class SettingsRepository {
       preferences.setString(_Settings.currentProfile, currentProfile);
     }
   }
+
+  bool get seenDisclaimer =>
+      preferences.getBool(_Settings.seenDisclaimer) ?? false;
+
+  set seenDisclaimer(bool seenDisclaimer) {
+    preferences.setBool(_Settings.seenDisclaimer, seenDisclaimer);
+  }
 }
 
 class _Settings {
   static const String profiles = 'profiles',
       themeMode = 'themeMode',
-      currentProfile = 'currentProfile';
+      currentProfile = 'currentProfile',
+      seenDisclaimer = 'seenDisclaimer';
 }

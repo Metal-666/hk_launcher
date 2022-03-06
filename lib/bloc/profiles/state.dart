@@ -7,12 +7,15 @@ class ProfilesState {
   final bool isNewProfileInitializing;
   final String? currentProfile;
 
+  final String? modpackLoadError;
+
   final List<int> hkVersions = const <int>[14, 15];
 
   const ProfilesState(this.tabIndex, this.profiles,
       {this.newProfile,
       this.isNewProfileInitializing = false,
-      this.currentProfile});
+      this.currentProfile,
+      this.modpackLoadError});
 
   ProfilesState copyWith(
           {int Function()? tabIndex,
@@ -20,7 +23,8 @@ class ProfilesState {
           Profile? Function()? newProfile,
           bool Function()? isNewProfileInitializing,
           String? Function()? newProfileError,
-          String? Function()? currentProfile}) =>
+          String? Function()? currentProfile,
+          String? Function()? modpackLoadError}) =>
       ProfilesState(tabIndex == null ? this.tabIndex : tabIndex.call(),
           profiles == null ? this.profiles : profiles.call(),
           newProfile: newProfile == null ? this.newProfile : newProfile.call(),
@@ -29,7 +33,10 @@ class ProfilesState {
               : isNewProfileInitializing.call(),
           currentProfile: currentProfile == null
               ? this.currentProfile
-              : currentProfile.call());
+              : currentProfile.call(),
+          modpackLoadError: modpackLoadError == null
+              ? this.modpackLoadError
+              : modpackLoadError.call());
 }
 
 class Profile {

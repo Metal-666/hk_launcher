@@ -35,11 +35,14 @@ String hkModpacksPath(String rootPath) => join(rootPath, 'Modpacks');
 String hkManagedPath(String rootPath, int version) =>
     join(hkDataPath(rootPath, version), 'Managed');
 
+String hkModpackPath(String rootPath, String modpack) =>
+    join(hkModpacksPath(rootPath), modpack);
+
 String hkModpackManagedPath(String rootPath, String modpack) =>
-    join(hkModpacksPath(rootPath), modpack, 'Managed');
+    join(hkModpackPath(rootPath, modpack), 'Managed');
 
 String hkSavesPath() => join(Platform.environment['UserProfile']!, 'AppData',
     'LocalLow', 'Team Cherry', 'Hollow Knight');
 
 String hkModpackSavesPath(String rootPath, String modpack) =>
-    join(hkModpacksPath(rootPath), modpack, 'Hollow Knight');
+    join(hkModpackPath(rootPath, modpack), 'Hollow Knight');

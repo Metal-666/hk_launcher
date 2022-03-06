@@ -9,6 +9,7 @@ import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../../data/settings/settings_repository.dart';
 import '../../../reusable/icon_text_button.dart';
+import '../dialogs/error_dialog.dart';
 
 class ProfilesPage extends StatelessWidget {
   const ProfilesPage({Key? key}) : super(key: key);
@@ -16,52 +17,79 @@ class ProfilesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
         create: (context) => ProfilesBloc(context.read<SettingsRepository>()),
-        child: BlocConsumer<ProfilesBloc, ProfilesState>(
-          listenWhen: (oldState, newState) =>
-              (oldState.newProfile == null) ^ (newState.newProfile == null),
-          listener: (context, state) {
-            if (state.newProfile != null) {
-              showDialog(
-                context: context,
-                useRootNavigator: false,
-                builder: (_) => BlocProvider.value(
-                  value: context.read<ProfilesBloc>(),
-                  child: const NewProfileDialog(),
+        child: MultiBlocListener(
+          listeners: <BlocListener>[
+            BlocListener<ProfilesBloc, ProfilesState>(
+                listenWhen: (oldState, newState) =>
+                    (oldState.modpackLoadError == null) ^
+                    (newState.modpackLoadError == null),
+                listener: (context, state) {
+                  if (state.modpackLoadError != null) {
+                    showDialog(
+                      context: context,
+                      useRootNavigator: false,
+                      builder: (_) => ErrorDialog('Error loading modpack',
+                          state.modpackLoadError!, () {}),
+                    );
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                }),
+            BlocListener<ProfilesBloc, ProfilesState>(
+              listenWhen: (oldState, newState) =>
+                  (oldState.newProfile == null) ^ (newState.newProfile == null),
+              listener: (context, state) {
+                if (state.newProfile != null) {
+                  showDialog(
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<ProfilesBloc>(),
+                      child: const NewProfileDialog(),
+                    ),
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+            )
+          ],
+          child: BlocBuilder<ProfilesBloc, ProfilesState>(
+            buildWhen: (oldState, newState) =>
+                oldState.tabIndex != newState.tabIndex ||
+                oldState.profiles.length != newState.profiles.length ||
+                oldState.currentProfile != newState.currentProfile,
+            builder: (context, state) => ScaffoldPage(
+              padding: EdgeInsets.zero,
+              header: const Mica(
+                  child: Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: PageHeader(title: Text('Profiles')),
+              )),
+              content: Mica(
+                child: TabView(
+                  wheelScroll: true,
+                  currentIndex: state.tabIndex,
+                  onChanged: (index) =>
+                      context.read<ProfilesBloc>().add(ChangeTab(index)),
+                  onNewPressed: () =>
+                      context.read<ProfilesBloc>().add(AddTab()),
+                  closeButtonVisibility: CloseButtonVisibilityMode.never,
+                  footer: Tooltip(
+                    message: 'Launch current profile',
+                    child: IconTextButton(FluentIcons.play, 'Launch',
+                        state.currentProfile == null ? null : () {},
+                        buttonType: ButtonType.text),
+                  ),
+                  tabs: state.profiles
+                      .map<Tab>((Profile profile) =>
+                          _tab(profile, state.currentProfile == profile.name))
+                      .toList(),
+                  bodies: state.profiles
+                      .map<Widget>((Profile profile) => _tabBody(context,
+                          profile, state.currentProfile == profile.name))
+                      .toList(),
                 ),
-              );
-            } else {
-              Navigator.of(context).pop();
-            }
-          },
-          builder: (context, state) => ScaffoldPage(
-            padding: EdgeInsets.zero,
-            header: const Mica(
-                child: Padding(
-              padding: EdgeInsets.only(top: 16),
-              child: PageHeader(title: Text('Profiles')),
-            )),
-            content: Mica(
-              child: TabView(
-                wheelScroll: true,
-                currentIndex: state.tabIndex,
-                onChanged: (index) =>
-                    context.read<ProfilesBloc>().add(ChangeTab(index)),
-                onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
-                closeButtonVisibility: CloseButtonVisibilityMode.never,
-                footer: Tooltip(
-                  message: 'Launch current profile',
-                  child: IconTextButton(FluentIcons.play, 'Launch',
-                      state.currentProfile == null ? null : () {},
-                      buttonType: ButtonType.text),
-                ),
-                tabs: state.profiles
-                    .map<Tab>((Profile profile) =>
-                        _tab(profile, state.currentProfile == profile.name))
-                    .toList(),
-                bodies: state.profiles
-                    .map<Widget>((Profile profile) => _tabBody(
-                        context, profile, state.currentProfile == profile.name))
-                    .toList(),
               ),
             ),
           ),
@@ -137,7 +165,16 @@ class ProfilesPage extends StatelessWidget {
                                                 IconTextButton(
                                                     FluentIcons.delete,
                                                     'Delete',
-                                                    () {})
+                                                    () {}),
+                                                IconTextButton(
+                                                    FluentIcons.folder,
+                                                    'Show',
+                                                    () => context
+                                                        .read<ProfilesBloc>()
+                                                        .add(
+                                                            ShowModpackInExplorer(
+                                                                profile,
+                                                                modpack)))
                                               ],
                                             )),
                                       )

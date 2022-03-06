@@ -52,3 +52,12 @@ class SelectModpack extends ProfilesEvent {
 
   SelectModpack(this.profile, this.modpack);
 }
+
+class CloseModpackErrorDialog extends ProfilesEvent {}
+
+class ShowModpackInExplorer extends ProfilesEvent {
+  final Profile profile;
+  final Modpack modpack;
+
+  ShowModpackInExplorer(this.profile, this.modpack);
+}

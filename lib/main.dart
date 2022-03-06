@@ -57,7 +57,7 @@ final GoRouter _router = GoRouter(
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) =>
                       FadeTransition(opacity: animation, child: child),
-            )),
+            ))
   ],
 );
 

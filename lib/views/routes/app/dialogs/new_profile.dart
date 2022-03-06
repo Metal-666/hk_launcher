@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hk_launcher/views/routes/app/dialogs/error_dialog.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/events.dart';
@@ -35,19 +36,10 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
   Widget _newProfileProgress() => const ResponsiveProgressRing();
 
   Widget _newProfileError(BuildContext context, ProfilesState state) =>
-      ContentDialog(
-          title: const Text('Error occured when creating this profile'),
-          backgroundDismiss: false,
-          content: Text(
-            state.newProfile!.profileError!,
-            style: FluentTheme.of(context).typography.bodyLarge,
-          ),
-          actions: <Widget>[
-            Button(
-                child: const Text('Close'),
-                onPressed: () =>
-                    context.read<ProfilesBloc>().add(CloseNewTabDialog()))
-          ]);
+      ErrorDialog(
+          'Error occured when creating this profile',
+          state.newProfile!.profileError!,
+          () => context.read<ProfilesBloc>().add(CloseNewTabDialog()));
 
   Widget _newProfileInput(BuildContext context, ProfilesState state) =>
       ContentDialog(
