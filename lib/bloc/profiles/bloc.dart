@@ -86,7 +86,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
               modpacks: const <Modpack>[Modpack(name: 'Vanilla')]);
 
           if (state.profiles.isEmpty) {
-            _selectProfile(newProfile);
+            await _selectProfile(newProfile);
           }
 
           emit(state.copyWith(
@@ -121,8 +121,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       _settingsRepository.profiles =
           state.profiles.map<String>((profile) => profile.toJson()).toList();
     });
-    on<MakeProfileCurrent>((event, emit) {
+    on<MakeProfileCurrent>((event, emit) async {
       emit(state.copyWith(currentProfile: () => event.profile.name));
+
+      await _selectProfile(event.profile);
 
       _settingsRepository.currentProfile = event.profile.name;
     });
