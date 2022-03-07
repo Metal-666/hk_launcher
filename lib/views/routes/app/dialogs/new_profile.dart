@@ -51,6 +51,8 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
               autovalidateMode: AutovalidateMode.always,
               onChanged: (text) =>
                   context.read<ProfilesBloc>().add(ChangeNewProfileName(text)),
+              onFieldSubmitted: (_) =>
+                  context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
               validator: (_) => state.newProfile?.nameError,
               placeholder: 'Profile name',
             ),
@@ -64,6 +66,9 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
                       onChanged: (text) => context
                           .read<ProfilesBloc>()
                           .add(ChangeNewProfilePath(text)),
+                      onFieldSubmitted: (_) => context
+                          .read<ProfilesBloc>()
+                          .add(SubmitNewTabDialog()),
                       validator: (_) => state.newProfile?.pathError,
                       placeholder: 'Hollow Knight installation path'),
                 ),
@@ -89,9 +94,8 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
         actions: [
           Button(
               child: const Text('Initialize'),
-              onPressed: () {
-                context.read<ProfilesBloc>().add(SubmitNewTabDialog());
-              }),
+              onPressed: () =>
+                  context.read<ProfilesBloc>().add(SubmitNewTabDialog())),
           Button(
               child: const Text('Cancel'),
               onPressed: () =>

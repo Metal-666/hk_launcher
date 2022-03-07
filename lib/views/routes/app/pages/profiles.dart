@@ -29,8 +29,12 @@ class ProfilesPage extends StatelessWidget {
                     showDialog(
                       context: context,
                       useRootNavigator: false,
-                      builder: (_) => ErrorDialog('Error loading modpack',
-                          state.modpackLoadError!, () {}),
+                      builder: (_) => ErrorDialog(
+                          'Error loading modpack',
+                          state.modpackLoadError!,
+                          () => context
+                              .read<ProfilesBloc>()
+                              .add(CloseModpackErrorDialog())),
                     );
                   } else {
                     Navigator.of(context).pop();
@@ -56,10 +60,6 @@ class ProfilesPage extends StatelessWidget {
             )
           ],
           child: BlocBuilder<ProfilesBloc, ProfilesState>(
-            buildWhen: (oldState, newState) =>
-                oldState.tabIndex != newState.tabIndex ||
-                oldState.profiles.length != newState.profiles.length ||
-                oldState.currentProfile != newState.currentProfile,
             builder: (context, state) => ScaffoldPage(
               padding: EdgeInsets.zero,
               header: const Mica(
