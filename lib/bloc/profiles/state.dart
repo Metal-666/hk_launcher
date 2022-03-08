@@ -65,6 +65,8 @@ class Profile {
 
   final String selectedModpack;
 
+  final bool isBeingDeleted;
+
   const Profile(
       {this.name,
       this.hkPath,
@@ -74,7 +76,8 @@ class Profile {
       this.profileError,
       this.hkVersion = 14,
       this.modpacks = const [],
-      this.selectedModpack = 'Vanilla'});
+      this.selectedModpack = 'Vanilla',
+      this.isBeingDeleted = false});
 
   Profile copyWith(
           {String? Function()? name,
@@ -85,7 +88,8 @@ class Profile {
           String? Function()? profileError,
           int Function()? hkVersion,
           List<Modpack> Function()? modpacks,
-          String Function()? selectedModpack}) =>
+          String Function()? selectedModpack,
+          bool Function()? isBeingDeleted}) =>
       Profile(
           name: name == null ? this.name : name.call(),
           hkPath: hkPath == null ? this.hkPath : hkPath.call(),
@@ -99,7 +103,10 @@ class Profile {
           modpacks: modpacks == null ? this.modpacks : modpacks.call(),
           selectedModpack: selectedModpack == null
               ? this.selectedModpack
-              : selectedModpack.call());
+              : selectedModpack.call(),
+          isBeingDeleted: isBeingDeleted == null
+              ? this.isBeingDeleted
+              : isBeingDeleted.call());
 
   Map<String, dynamic> toMap() => {
         'name': name,

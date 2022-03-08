@@ -110,14 +110,31 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
                 nameError: () => nameError, pathError: () => pathError)));
       }
     });
-    on<DeleteProfile>((event, emit) {
+    on<DeleteProfile>((event, emit) async {
+      emit(state.copyWith(
+          profiles: () => List.of(state.profiles)
+            ..[state.profiles.indexOf(event.profile)] =
+                event.profile.copyWith(isBeingDeleted: () => true)));
+
       ProfilesState newState = state.copyWith(
-          profiles: () => List.of(state.profiles)..remove(event.profile));
+          profiles: () => List.of(state.profiles)
+            ..removeWhere((profile) => profile.name == event.profile.name));
+
       if (newState.tabIndex == newState.profiles.length &&
           newState.tabIndex != 0) {
         newState = newState.copyWith(tabIndex: () => newState.tabIndex - 1);
       }
+
+      if (state.currentProfile == event.profile.name) {
+        newState = newState.copyWith(currentProfile: () => null);
+
+        _settingsRepository.currentProfile = null;
+      }
+
+      await (_deleteProfile(event.profile));
+
       emit(newState);
+
       _settingsRepository.profiles =
           state.profiles.map<String>((profile) => profile.toJson()).toList();
     });
@@ -182,7 +199,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
               ..[state.profiles.indexOf(event.profile)] = event.profile
                   .copyWith(
                       modpacks: () => _loadProfileModpacks(
-                          Directory(event.profile.hkPath!)))));
+                          Directory(hkModpacksPath(event.profile.hkPath!))))));
       } else {
         emit(state.copyWith(
             newModpack: () =>
@@ -284,4 +301,22 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       .whereType<Directory>()
       .map<Modpack>((element) => Modpack(name: basename(element.path)))
       .toList();
+
+  static Future<void> _deleteProfile(Profile profile) async {
+    Link managedLnk = Link(hkManagedPath(profile.hkPath!, profile.hkVersion)),
+        savesLnk = Link(hkSavesPath());
+
+    if (await managedLnk.exists()) {
+      await managedLnk.delete();
+    }
+
+    if (await savesLnk.exists()) {
+      await savesLnk.delete();
+    }
+
+    await Directory(hkModpackManagedPath(profile.hkPath!, 'Vanilla'))
+        .move(hkManagedPath(profile.hkPath!, profile.hkVersion));
+
+    await Directory(hkModpacksPath(profile.hkPath!)).delete(recursive: true);
+  }
 }

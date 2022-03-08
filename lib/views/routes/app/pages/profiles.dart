@@ -209,11 +209,42 @@ class ProfilesPage extends StatelessWidget {
                       label: 'Manage',
                       child: Expander(
                           header: const Text('Delete this profile?'),
-                          content: FilledButton(
-                              child: const Text('Yes please'),
-                              onPressed: () => context
-                                  .read<ProfilesBloc>()
-                                  .add(DeleteProfile(profile)))),
+                          content: Column(
+                            children: [
+                              const Text.rich(TextSpan(children: <InlineSpan>[
+                                TextSpan(
+                                    text:
+                                        'Game files for this installation will be restored from the Vanilla modpack, then all modpacks will be deleted. ALL save files will be deleted too! If you want to keep any of the save files, go back and use the '),
+                                WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Mica(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text.rich(
+                                            TextSpan(children: <InlineSpan>[
+                                          WidgetSpan(
+                                              child: Icon(FluentIcons.folder)),
+                                          TextSpan(text: ' Show')
+                                        ])),
+                                      ),
+                                    )),
+                                TextSpan(
+                                    text:
+                                        ' button under the respective modpack to manually copy them to a safe place. This changes affect only this installation, other profiles will not be touched.')
+                              ])),
+                              const SizedBox(height: 15),
+                              Expander(
+                                header: const Text('I read the text above'),
+                                content: FilledButton(
+                                    child: const Text('Yeet'),
+                                    onPressed: profile.isBeingDeleted
+                                        ? null
+                                        : () => context
+                                            .read<ProfilesBloc>()
+                                            .add(DeleteProfile(profile))),
+                              ),
+                            ],
+                          )),
                     )
                   ]))),
         ),
