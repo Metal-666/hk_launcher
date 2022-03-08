@@ -82,3 +82,5 @@ class ChangeNewModpackName extends ProfilesEvent {
 }
 
 class CloseNewModpackDialog extends ProfilesEvent {}
+
+class LaunchHK extends ProfilesEvent {}

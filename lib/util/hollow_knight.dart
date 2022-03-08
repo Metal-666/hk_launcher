@@ -46,3 +46,6 @@ String hkSavesPath() => join(Platform.environment['UserProfile']!, 'AppData',
 
 String hkModpackSavesPath(String rootPath, String modpack) =>
     join(hkModpackPath(rootPath, modpack), 'Hollow Knight');
+
+void launchHK(String rootPath, int version) =>
+    Process.run(hkExePath(rootPath, version), const <String>[]);

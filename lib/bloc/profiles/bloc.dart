@@ -210,6 +210,12 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         newModpack: () => state.newModpack?.copyWith(name: () => event.name))));
     on<CloseNewModpackDialog>(
         (event, emit) => emit(state.copyWith(newModpack: () => null)));
+    on<LaunchHK>(((event, emit) {
+      Profile currentProfile = state.profiles
+          .singleWhere((profile) => profile.name == state.currentProfile);
+
+      launchHK(currentProfile.hkPath!, currentProfile.hkVersion);
+    }));
   }
 
   Future<String?> _validateHKPath(String? path, int version) async {

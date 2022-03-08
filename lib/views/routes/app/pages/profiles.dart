@@ -78,8 +78,13 @@ class ProfilesPage extends StatelessWidget {
                   closeButtonVisibility: CloseButtonVisibilityMode.never,
                   footer: Tooltip(
                     message: 'Launch current profile',
-                    child: IconTextButton(FluentIcons.play, 'Launch',
-                        state.currentProfile == null ? null : () {},
+                    child: IconTextButton(
+                        FluentIcons.play,
+                        'Launch',
+                        state.currentProfile == null
+                            ? null
+                            : () =>
+                                context.read<ProfilesBloc>().add(LaunchHK()),
                         buttonType: ButtonType.text),
                   ),
                   tabs: state.profiles
