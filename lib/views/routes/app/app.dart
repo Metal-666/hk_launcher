@@ -12,34 +12,40 @@ class AppPage extends StatelessWidget {
 
   @override
   Widget build(context) => BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) => _navigationView(context, state),
-      );
+      builder: (context, state) => _navigationView(context, state));
 
   NavigationView _navigationView(BuildContext context, MainState state) =>
       NavigationView(
-          content: NavigationBody(
-            index: state.navIndex,
-            children: const <Widget>[ProfilesPage(), SettingsPage()],
+        content: NavigationBody(
+          index: state.navIndex,
+          children: const <Widget>[
+            ProfilesPage(),
+            SettingsPage(),
+          ],
+        ),
+        pane: NavigationPane(
+          header: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(
+              'HK LAUNCHER',
+              style: FluentTheme.of(context).typography.title,
+            ),
           ),
-          pane: NavigationPane(
-              header: Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Text(
-                  'HK LAUNCHER',
-                  style: FluentTheme.of(context).typography.title,
-                ),
-              ),
-              footerItems: <NavigationPaneItem>[
-                PaneItem(
-                    icon: const Icon(FluentIcons.settings),
-                    title: const Text('Settings'))
-              ],
-              selected: state.navIndex,
-              onChanged: (int index) =>
-                  context.read<MainBloc>().add(Navigate(index)),
-              items: <NavigationPaneItem>[
-                PaneItem(
-                    icon: const Icon(FluentIcons.project_collection),
-                    title: const Text('Profiles'))
-              ]));
+          footerItems: <NavigationPaneItem>[
+            PaneItem(
+              icon: const Icon(FluentIcons.settings),
+              title: const Text('Settings'),
+            )
+          ],
+          selected: state.navIndex,
+          onChanged: (int index) =>
+              context.read<MainBloc>().add(Navigate(index)),
+          items: <NavigationPaneItem>[
+            PaneItem(
+              icon: const Icon(FluentIcons.project_collection),
+              title: const Text('Profiles'),
+            )
+          ],
+        ),
+      );
 }

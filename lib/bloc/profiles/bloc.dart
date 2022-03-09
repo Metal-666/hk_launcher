@@ -111,14 +111,12 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       }
     });
     on<DeleteProfile>((event, emit) async {
-      emit(state.copyWith(
-          profiles: () => List.of(state.profiles)
-            ..[state.profiles.indexOf(event.profile)] =
-                event.profile.copyWith(isBeingDeleted: () => true)));
+      emit(state.copyWith(isDeletingProfile: () => true));
 
       ProfilesState newState = state.copyWith(
           profiles: () => List.of(state.profiles)
-            ..removeWhere((profile) => profile.name == event.profile.name));
+            ..removeWhere((profile) => profile.name == event.profile.name),
+          isDeletingProfile: () => false);
 
       if (newState.tabIndex == newState.profiles.length &&
           newState.tabIndex != 0) {
@@ -131,7 +129,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         _settingsRepository.currentProfile = null;
       }
 
-      await (_deleteProfile(event.profile));
+      await deleteProfile(event.profile);
 
       emit(newState);
 
@@ -184,8 +182,8 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         Directory(hkModpackPath(event.profile.hkPath!, event.modpack.name!))
             .showInExplorer());
     on<SubmitNewModpackDialog>((event, emit) async {
-      final String? modpackError =
-          await _validateModpack(event.profile.hkPath!, event.modpack.name);
+      final String? modpackError = await _validateModpack(
+          event.profile.hkPath!, event.modpack.name?.trim());
 
       if (modpackError == null) {
         emit(state.copyWith(isNewModpackInitializing: () => true));
@@ -264,8 +262,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
   }
 
   static Future<void> _createModpack(Profile profile, Modpack modpack) async {
+    String name = modpack.name!.trim();
+
     final Directory modpackDir =
-        Directory(hkModpackPath(profile.hkPath!, modpack.name!));
+        Directory(hkModpackPath(profile.hkPath!, name));
 
     if (await modpackDir.exists()) {
       await modpackDir.delete();
@@ -275,10 +275,9 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         Directory(hkModpackManagedPath(profile.hkPath!, modpack.basedOn!));
 
     await basedOnModpackManagedDir
-        .move(hkModpackManagedPath(profile.hkPath!, modpack.name!));
+        .move(hkModpackManagedPath(profile.hkPath!, name));
 
-    await Directory(hkModpackSavesPath(profile.hkPath!, modpack.name!))
-        .create();
+    await Directory(hkModpackSavesPath(profile.hkPath!, name)).create();
   }
 
   static Future<void> _selectProfile(Profile profile) async {
@@ -287,7 +286,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         savesDir = Directory(hkSavesPath());
 
     if (await savesDir.exists()) {
-      await savesDir.delete(recursive: true);
+      await savesDir.rename('Hollow Knight (← your old saves are here)');
     }
 
     if (!await modpackSavesDir.exists()) {
@@ -308,7 +307,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       .map<Modpack>((element) => Modpack(name: basename(element.path)))
       .toList();
 
-  static Future<void> _deleteProfile(Profile profile) async {
+  static Future<void> deleteProfile(Profile profile) async {
     Link managedLnk = Link(hkManagedPath(profile.hkPath!, profile.hkVersion)),
         savesLnk = Link(hkSavesPath());
 

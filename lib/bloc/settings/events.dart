@@ -7,3 +7,5 @@ class ThemeModeChanged extends SettingsEvent {
 
   ThemeModeChanged(this.themeMode);
 }
+
+class RestoreHK extends SettingsEvent {}

@@ -7,7 +7,9 @@ class ResponsiveProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => CustomSingleChildLayout(
-      delegate: _LayoutDelegate(3), child: const ProgressRing());
+        delegate: _LayoutDelegate(3),
+        child: const ProgressRing(),
+      );
 }
 
 class _LayoutDelegate extends SingleChildLayoutDelegate {

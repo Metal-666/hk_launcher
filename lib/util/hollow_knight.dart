@@ -13,6 +13,7 @@ String hkExePath(String rootPath, int version) {
         return join(rootPath, 'Hollow Knight.exe');
       }
   }
+
   return '';
 }
 
@@ -27,6 +28,7 @@ String hkDataPath(String rootPath, int version) {
         return join(rootPath, 'Hollow Knight_Data');
       }
   }
+
   return '';
 }
 

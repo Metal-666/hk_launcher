@@ -6,11 +6,22 @@ class SettingsState {
 
   final ThemeMode themeMode;
 
-  SettingsState(this.needsRestart, this.themeMode);
+  final bool restoringHK;
+
+  SettingsState(
+      {this.needsRestart = false,
+      required this.themeMode,
+      this.restoringHK = false});
 
   SettingsState copyWith(
-          {bool Function()? needsRestart, ThemeMode Function()? themeMode}) =>
+          {bool Function()? needsRestart,
+          ThemeMode Function()? themeMode,
+          bool Function()? restoringHK}) =>
       SettingsState(
-          needsRestart == null ? this.needsRestart : needsRestart.call(),
-          themeMode == null ? this.themeMode : themeMode.call());
+        needsRestart:
+            needsRestart == null ? this.needsRestart : needsRestart.call(),
+        themeMode: themeMode == null ? this.themeMode : themeMode.call(),
+        restoringHK:
+            restoringHK == null ? this.restoringHK : restoringHK.call(),
+      );
 }

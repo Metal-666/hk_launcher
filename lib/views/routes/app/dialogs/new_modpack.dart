@@ -44,13 +44,16 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
         ),
         actions: <Widget>[
           Button(
-              child: const Text('Create'),
-              onPressed: () => context.read<ProfilesBloc>().add(
-                  SubmitNewModpackDialog(widget.profile, state.newModpack!))),
+            child: const Text('Create'),
+            onPressed: () => context
+                .read<ProfilesBloc>()
+                .add(SubmitNewModpackDialog(widget.profile, state.newModpack!)),
+          ),
           Button(
-              child: const Text('Cancel'),
-              onPressed: () =>
-                  context.read<ProfilesBloc>().add(CloseNewModpackDialog()))
+            child: const Text('Cancel'),
+            onPressed: () =>
+                context.read<ProfilesBloc>().add(CloseNewModpackDialog()),
+          )
         ],
       );
 

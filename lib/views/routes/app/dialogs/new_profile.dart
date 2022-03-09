@@ -21,25 +21,28 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<ProfilesBloc, ProfilesState>(builder: (context, state) {
-        if (state.newProfile?.shouldOverwritePath ?? false) {
-          _overwriteControllerText(pathController, state.newProfile?.hkPath);
-        }
+      BlocBuilder<ProfilesBloc, ProfilesState>(
+        builder: (context, state) {
+          if (state.newProfile?.shouldOverwritePath ?? false) {
+            _overwriteControllerText(pathController, state.newProfile?.hkPath);
+          }
 
-        return state.isNewProfileInitializing
-            ? _newProfileProgress()
-            : state.newProfile?.profileError != null
-                ? _newProfileError(context, state)
-                : _newProfileInput(context, state);
-      });
+          return state.isNewProfileInitializing
+              ? _newProfileProgress()
+              : state.newProfile?.profileError != null
+                  ? _newProfileError(context, state)
+                  : _newProfileInput(context, state);
+        },
+      );
 
   Widget _newProfileProgress() => const ResponsiveProgressRing();
 
   Widget _newProfileError(BuildContext context, ProfilesState state) =>
       ErrorDialog(
-          'Error occured when creating this profile',
-          state.newProfile!.profileError!,
-          () => context.read<ProfilesBloc>().add(CloseNewTabDialog()));
+        'Error occured when creating this profile',
+        state.newProfile!.profileError!,
+        () => context.read<ProfilesBloc>().add(CloseNewTabDialog()),
+      );
 
   Widget _newProfileInput(BuildContext context, ProfilesState state) =>
       ContentDialog(
@@ -73,33 +76,40 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
                       placeholder: 'Hollow Knight installation path'),
                 ),
                 FilledButton(
-                    child: const Text('Browse'),
-                    onPressed: () =>
-                        context.read<ProfilesBloc>().add(PickHKFolder()))
+                  child: const Text('Browse'),
+                  onPressed: () =>
+                      context.read<ProfilesBloc>().add(PickHKFolder()),
+                ),
               ],
             ),
             DropDownButton(
-                title: Text('Hollow Knight Version: ' +
-                    _hkVersionToString(
-                        state.newProfile?.hkVersion ?? state.hkVersions.first)),
-                items: state.hkVersions
-                    .map<DropDownButtonItem>((version) => DropDownButtonItem(
-                        onTap: () => context
-                            .read<ProfilesBloc>()
-                            .add(ChangeNewProfileVersion(version)),
-                        title: Text(_hkVersionToString(version))))
-                    .toList())
+              title: Text('Hollow Knight Version: ' +
+                  _hkVersionToString(
+                      state.newProfile?.hkVersion ?? state.hkVersions.first)),
+              items: state.hkVersions
+                  .map<DropDownButtonItem>(
+                    (version) => DropDownButtonItem(
+                      onTap: () => context
+                          .read<ProfilesBloc>()
+                          .add(ChangeNewProfileVersion(version)),
+                      title: Text(_hkVersionToString(version)),
+                    ),
+                  )
+                  .toList(),
+            ),
           ],
         ),
         actions: [
           Button(
-              child: const Text('Initialize'),
-              onPressed: () =>
-                  context.read<ProfilesBloc>().add(SubmitNewTabDialog())),
+            child: const Text('Initialize'),
+            onPressed: () =>
+                context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
+          ),
           Button(
-              child: const Text('Cancel'),
-              onPressed: () =>
-                  context.read<ProfilesBloc>().add(CloseNewTabDialog()))
+            child: const Text('Cancel'),
+            onPressed: () =>
+                context.read<ProfilesBloc>().add(CloseNewTabDialog()),
+          )
         ],
       );
 
@@ -114,6 +124,7 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
 
   String _hkVersionToString(int version) {
     final String versionText = version.toString();
+
     return versionText[0] + '.' + versionText.substring(1);
   }
 

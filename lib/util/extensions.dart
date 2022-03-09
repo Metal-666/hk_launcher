@@ -35,11 +35,6 @@ extension DirectoryExtension on Directory {
 }
 
 extension LinkExtension on Link {
-  Future<Link> set(String target) async {
-    if (await exists()) {
-      return update(target);
-    } else {
-      return create(target);
-    }
-  }
+  Future<Link> set(String target) async =>
+      await exists() ? update(target) : create(target);
 }

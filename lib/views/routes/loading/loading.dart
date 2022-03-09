@@ -12,41 +12,49 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocConsumer<LoadingBloc, LoadingState>(
-      listener: (context, state) {
-        if (state.loaded) {
-          GoRouter.of(context).go('/');
-        }
-      },
-      builder: (context, state) => state.disclaimer
-          ? ContentDialog(
-              title: const Text('Read this! [wip]'),
-              backgroundDismiss: false,
-              content: RichText(
-                text: TextSpan(
-                  style: FluentTheme.of(context).typography.bodyLarge,
-                  children: const <InlineSpan>[
-                    TextSpan(text: '- Move save files (will be deleted), use '),
-                    WidgetSpan(child: Icon(FluentIcons.folder)),
-                    TextSpan(text: ' button below.')
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 7),
-                    child: IconButton(
-                        icon: const Icon(FluentIcons.folder),
-                        onPressed: () =>
-                            context.read<LoadingBloc>().add(OpenSavesFolder())),
+        listener: (context, state) {
+          if (state.loaded) {
+            GoRouter.of(context).go('/');
+          }
+        },
+        builder: (context, state) => state.disclaimer
+            ? ContentDialog(
+                title: const Text('Read this! [wip]'),
+                backgroundDismiss: false,
+                content: RichText(
+                  text: TextSpan(
+                    style: FluentTheme.of(context).typography.bodyLarge,
+                    children: const <InlineSpan>[
+                      TextSpan(
+                          text: '- Move save files (will be deleted), use '),
+                      WidgetSpan(child: Icon(FluentIcons.folder)),
+                      TextSpan(text: ' button below.')
+                    ],
                   ),
-                  Button(
-                    child: const Text('Okay'),
-                    onPressed: () =>
-                        context.read<LoadingBloc>().add(DismissedDisclaimer()),
+                ),
+                actions: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 7),
+                        child: IconButton(
+                          icon: const Icon(FluentIcons.folder),
+                          onPressed: () => context
+                              .read<LoadingBloc>()
+                              .add(OpenSavesFolder()),
+                        ),
+                      ),
+                      Button(
+                        child: const Text('Okay'),
+                        onPressed: () => context
+                            .read<LoadingBloc>()
+                            .add(DismissedDisclaimer()),
+                      )
+                    ],
                   )
-                ])
-              ],
-            )
-          : const ScaffoldPage(content: ResponsiveProgressRing()));
+                ],
+              )
+            : const ScaffoldPage(content: ResponsiveProgressRing()),
+      );
 }

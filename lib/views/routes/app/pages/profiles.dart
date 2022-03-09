@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hk_launcher/bloc/profiles/events.dart';
+import 'package:hk_launcher/views/reusable/nested_expander.dart';
+import 'package:hk_launcher/views/reusable/responsive_progress_ring.dart';
 import 'package:hk_launcher/views/routes/app/dialogs/new_modpack.dart';
 import 'package:hk_launcher/views/routes/app/dialogs/new_profile.dart';
 
@@ -21,25 +23,27 @@ class ProfilesPage extends StatelessWidget {
         child: MultiBlocListener(
           listeners: <BlocListener>[
             BlocListener<ProfilesBloc, ProfilesState>(
-                listenWhen: (oldState, newState) =>
-                    (oldState.modpackLoadError == null) ^
-                    (newState.modpackLoadError == null),
-                listener: (context, state) {
-                  if (state.modpackLoadError != null) {
-                    showDialog(
-                      context: context,
-                      useRootNavigator: false,
-                      builder: (_) => ErrorDialog(
-                          'Error loading modpack',
-                          state.modpackLoadError!,
-                          () => context
-                              .read<ProfilesBloc>()
-                              .add(CloseModpackErrorDialog())),
-                    );
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                }),
+              listenWhen: (oldState, newState) =>
+                  (oldState.modpackLoadError == null) ^
+                  (newState.modpackLoadError == null),
+              listener: (context, state) {
+                if (state.modpackLoadError != null) {
+                  showDialog(
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (_) => ErrorDialog(
+                      'Error loading modpack',
+                      state.modpackLoadError!,
+                      () => context
+                          .read<ProfilesBloc>()
+                          .add(CloseModpackErrorDialog()),
+                    ),
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
             BlocListener<ProfilesBloc, ProfilesState>(
               listenWhen: (oldState, newState) =>
                   (oldState.newProfile == null) ^ (newState.newProfile == null),
@@ -57,16 +61,32 @@ class ProfilesPage extends StatelessWidget {
                   Navigator.of(context).pop();
                 }
               },
-            )
+            ),
+            BlocListener<ProfilesBloc, ProfilesState>(
+              listenWhen: (oldState, newState) =>
+                  (oldState.isDeletingProfile) ^ (newState.isDeletingProfile),
+              listener: (context, state) {
+                if (state.isDeletingProfile) {
+                  showDialog(
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (_) => const ResponsiveProgressRing(),
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
           ],
           child: BlocBuilder<ProfilesBloc, ProfilesState>(
             builder: (context, state) => ScaffoldPage(
               padding: EdgeInsets.zero,
               header: const Mica(
-                  child: Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: PageHeader(title: Text('Profiles')),
-              )),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: PageHeader(title: Text('Profiles')),
+                ),
+              ),
               content: Mica(
                 child: TabView(
                   wheelScroll: true,
@@ -132,126 +152,129 @@ class ProfilesPage extends StatelessWidget {
         },
         child: SizedBox.expand(
           child: Container(
-              padding: const EdgeInsets.all(8),
-              color: FluentTheme.of(context).scaffoldBackgroundColor,
-              child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            profile.name ?? 'CORRUPT',
-                            style: FluentTheme.of(context).typography.subtitle,
-                          ),
+            padding: const EdgeInsets.all(8),
+            color: FluentTheme.of(context).scaffoldBackgroundColor,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          profile.name ?? 'CORRUPT',
+                          style: FluentTheme.of(context).typography.subtitle,
                         ),
-                        isCurrent
-                            ? const Text('This is your current profile')
-                            : FilledButton(
-                                child: const Text('Make current'),
-                                onPressed: () => context
-                                    .read<ProfilesBloc>()
-                                    .add(MakeProfileCurrent(profile)))
-                      ],
-                    ),
-                    InfoLabel(
-                        label: 'Modpacks',
-                        child: Card(
-                            child: Column(
-                                children: profile.modpacks
-                                    .map<Widget>(
-                                      (modpack) => Row(children: <Widget>[
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: IconButton(
-                                            icon: Icon(profile
-                                                        .selectedModpack ==
-                                                    modpack.name
-                                                ? FluentIcons.favorite_star_fill
-                                                : FluentIcons.favorite_star),
-                                            onPressed: () => context
+                      ),
+                      isCurrent
+                          ? const Text('This is your current profile')
+                          : FilledButton(
+                              child: const Text('Make current'),
+                              onPressed: () => context
+                                  .read<ProfilesBloc>()
+                                  .add(MakeProfileCurrent(profile)),
+                            )
+                    ],
+                  ),
+                  InfoLabel(
+                    label: 'Modpacks',
+                    child: Card(
+                      child: Column(
+                        children: profile.modpacks
+                            .map<Widget>(
+                              (modpack) => Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: IconButton(
+                                      icon: Icon(profile.selectedModpack ==
+                                              modpack.name
+                                          ? FluentIcons.favorite_star_fill
+                                          : FluentIcons.favorite_star),
+                                      onPressed: () => context
+                                          .read<ProfilesBloc>()
+                                          .add(SelectModpack(profile, modpack)),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Expander(
+                                      header: Text(modpack.name ?? 'ERROR'),
+                                      content: Row(
+                                        children: <Widget>[
+                                          IconTextButton(
+                                            FluentIcons.dependency_add,
+                                            'Duplicate',
+                                            () => context
                                                 .read<ProfilesBloc>()
-                                                .add(SelectModpack(
-                                                    profile, modpack)),
+                                                .add(DuplicateModpack(modpack)),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Expander(
-                                              header:
-                                                  Text(modpack.name ?? 'ERROR'),
-                                              content: Row(
-                                                children: <Widget>[
-                                                  IconTextButton(
-                                                      FluentIcons
-                                                          .dependency_add,
-                                                      'Duplicate',
-                                                      () => context
-                                                          .read<ProfilesBloc>()
-                                                          .add(DuplicateModpack(
-                                                              modpack))),
-                                                  IconTextButton(
-                                                      FluentIcons.delete,
-                                                      'Delete',
-                                                      () {}),
-                                                  IconTextButton(
-                                                      FluentIcons.folder,
-                                                      'Show',
-                                                      () => context
-                                                          .read<ProfilesBloc>()
-                                                          .add(
-                                                              ShowModpackInExplorer(
-                                                                  profile,
-                                                                  modpack)))
-                                                ],
-                                              )),
-                                        )
-                                      ]),
-                                    )
-                                    .toList()))),
-                    InfoLabel(
-                      label: 'Manage',
-                      child: Expander(
-                          header: const Text('Delete this profile?'),
-                          content: Column(
-                            children: [
-                              const Text.rich(TextSpan(children: <InlineSpan>[
-                                TextSpan(
-                                    text:
-                                        'Game files for this installation will be restored from the Vanilla modpack, then all modpacks will be deleted. ALL save files will be deleted too! If you want to keep any of the save files, go back and use the '),
-                                WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: Mica(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: Text.rich(
-                                            TextSpan(children: <InlineSpan>[
-                                          WidgetSpan(
-                                              child: Icon(FluentIcons.folder)),
-                                          TextSpan(text: ' Show')
-                                        ])),
+                                          IconTextButton(FluentIcons.delete,
+                                              'Delete', () {}),
+                                          IconTextButton(
+                                            FluentIcons.folder,
+                                            'Show',
+                                            () => context
+                                                .read<ProfilesBloc>()
+                                                .add(ShowModpackInExplorer(
+                                                    profile, modpack)),
+                                          )
+                                        ],
                                       ),
-                                    )),
-                                TextSpan(
-                                    text:
-                                        ' button under the respective modpack to manually copy them to a safe place. This changes affect only this installation, other profiles will not be touched.')
-                              ])),
-                              const SizedBox(height: 15),
-                              Expander(
-                                header: const Text('I read the text above'),
-                                content: FilledButton(
-                                    child: const Text('Yeet'),
-                                    onPressed: profile.isBeingDeleted
-                                        ? null
-                                        : () => context
-                                            .read<ProfilesBloc>()
-                                            .add(DeleteProfile(profile))),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
-                          )),
-                    )
-                  ]))),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Manage',
+                    child: NestedExpander(
+                      headerOuter: const Text('Delete this profile?'),
+                      headerInner: const Text('I read the text above'),
+                      contentOuter: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                                text:
+                                    'Game files for this installation will be restored from the Vanilla modpack, then all modpacks will be deleted. ALL save files will be deleted too! If you want to keep any of the save files, go back and use the '),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Mica(
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: <InlineSpan>[
+                                        WidgetSpan(
+                                            child: Icon(FluentIcons.folder)),
+                                        TextSpan(text: ' Show')
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TextSpan(
+                                text:
+                                    ' button under the respective modpack to manually copy them to a safe place. This changes affect only this installation, other profiles will not be touched.'),
+                          ],
+                        ),
+                      ),
+                      contentInner: FilledButton(
+                        child: const Text('Yeet'),
+                        onPressed: () => context
+                            .read<ProfilesBloc>()
+                            .add(DeleteProfile(profile)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       );
 }

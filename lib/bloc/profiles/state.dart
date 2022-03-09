@@ -12,6 +12,8 @@ class ProfilesState {
   final Modpack? newModpack;
   final bool isNewModpackInitializing;
 
+  final bool isDeletingProfile;
+
   final List<int> hkVersions = const <int>[14, 15];
 
   const ProfilesState(this.tabIndex, this.profiles,
@@ -20,7 +22,8 @@ class ProfilesState {
       this.currentProfile,
       this.modpackLoadError,
       this.newModpack,
-      this.isNewModpackInitializing = false});
+      this.isNewModpackInitializing = false,
+      this.isDeletingProfile = false});
 
   ProfilesState copyWith(
           {int Function()? tabIndex,
@@ -30,7 +33,8 @@ class ProfilesState {
           String? Function()? currentProfile,
           String? Function()? modpackLoadError,
           Modpack? Function()? newModpack,
-          bool Function()? isNewModpackInitializing}) =>
+          bool Function()? isNewModpackInitializing,
+          bool Function()? isDeletingProfile}) =>
       ProfilesState(tabIndex == null ? this.tabIndex : tabIndex.call(),
           profiles == null ? this.profiles : profiles.call(),
           newProfile: newProfile == null ? this.newProfile : newProfile.call(),
@@ -46,7 +50,10 @@ class ProfilesState {
           newModpack: newModpack == null ? this.newModpack : newModpack.call(),
           isNewModpackInitializing: isNewModpackInitializing == null
               ? this.isNewModpackInitializing
-              : isNewModpackInitializing.call());
+              : isNewModpackInitializing.call(),
+          isDeletingProfile: isDeletingProfile == null
+              ? this.isDeletingProfile
+              : isDeletingProfile.call());
 }
 
 class Profile {
@@ -65,8 +72,6 @@ class Profile {
 
   final String selectedModpack;
 
-  final bool isBeingDeleted;
-
   const Profile(
       {this.name,
       this.hkPath,
@@ -76,8 +81,7 @@ class Profile {
       this.profileError,
       this.hkVersion = 14,
       this.modpacks = const [],
-      this.selectedModpack = 'Vanilla',
-      this.isBeingDeleted = false});
+      this.selectedModpack = 'Vanilla'});
 
   Profile copyWith(
           {String? Function()? name,
@@ -88,8 +92,7 @@ class Profile {
           String? Function()? profileError,
           int Function()? hkVersion,
           List<Modpack> Function()? modpacks,
-          String Function()? selectedModpack,
-          bool Function()? isBeingDeleted}) =>
+          String Function()? selectedModpack}) =>
       Profile(
           name: name == null ? this.name : name.call(),
           hkPath: hkPath == null ? this.hkPath : hkPath.call(),
@@ -103,10 +106,7 @@ class Profile {
           modpacks: modpacks == null ? this.modpacks : modpacks.call(),
           selectedModpack: selectedModpack == null
               ? this.selectedModpack
-              : selectedModpack.call(),
-          isBeingDeleted: isBeingDeleted == null
-              ? this.isBeingDeleted
-              : isBeingDeleted.call());
+              : selectedModpack.call());
 
   Map<String, dynamic> toMap() => {
         'name': name,
