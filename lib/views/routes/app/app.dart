@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '../../../bloc/main/bloc.dart';
 import '../../../bloc/main/events.dart';
@@ -16,6 +17,23 @@ class AppPage extends StatelessWidget {
 
   NavigationView _navigationView(BuildContext context, MainState state) =>
       NavigationView(
+        appBar: NavigationAppBar(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8, left: 4),
+            child: Text(
+              'HK LAUNCHER',
+              style: FluentTheme.of(context).typography.title,
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          actions: SizedBox.square(
+            dimension: 50,
+            child: IconButton(
+              icon: const Icon(AntDesign.github, size: 32),
+              onPressed: () => context.read<MainBloc>().add(OpenGitHub()),
+            ),
+          ),
+        ),
         content: NavigationBody(
           index: state.navIndex,
           children: const <Widget>[
@@ -24,12 +42,18 @@ class AppPage extends StatelessWidget {
           ],
         ),
         pane: NavigationPane(
-          header: Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Text(
-              'HK LAUNCHER',
-              style: FluentTheme.of(context).typography.title,
-            ),
+          header: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                'Russian warship',
+                style: TextStyle(color: Colors.blue),
+                textAlign: TextAlign.center,
+              ),
+              Text('go fuck yourself',
+                  style: TextStyle(color: Colors.yellow),
+                  textAlign: TextAlign.center)
+            ],
           ),
           footerItems: <NavigationPaneItem>[
             PaneItem(

@@ -88,38 +88,41 @@ class ProfilesPage extends StatelessWidget {
                 ),
               ),
               content: Mica(
-                child: TabView(
-                  wheelScroll: true,
-                  currentIndex: state.tabIndex,
-                  onChanged: (index) =>
-                      context.read<ProfilesBloc>().add(ChangeTab(index)),
-                  onNewPressed: () =>
-                      context.read<ProfilesBloc>().add(AddTab()),
-                  closeButtonVisibility: CloseButtonVisibilityMode.never,
-                  footer: Tooltip(
-                    message: 'Launch current profile',
-                    child: IconTextButton(
-                        FluentIcons.play,
-                        'Launch',
-                        state.currentProfile == null
-                            ? null
-                            : () =>
-                                context.read<ProfilesBloc>().add(LaunchHK()),
-                        buttonType: ButtonType.text),
-                  ),
-                  tabs: state.profiles
-                      .map<Tab>((Profile profile) =>
-                          _tab(profile, state.currentProfile == profile.name))
-                      .toList(),
-                  bodies: state.profiles
-                      .map<Widget>((Profile profile) => _tabBody(context,
-                          profile, state.currentProfile == profile.name))
-                      .toList(),
-                ),
+                backgroundColor: state.profiles.isEmpty
+                    ? FluentTheme.of(context).acrylicBackgroundColor
+                    : null,
+                child: _tabView(context, state),
               ),
             ),
           ),
         ),
+      );
+
+  Widget _tabView(BuildContext context, ProfilesState state) => TabView(
+        wheelScroll: true,
+        currentIndex: state.tabIndex,
+        onChanged: (index) =>
+            context.read<ProfilesBloc>().add(ChangeTab(index)),
+        onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
+        closeButtonVisibility: CloseButtonVisibilityMode.never,
+        footer: Tooltip(
+          message: 'Launch current profile',
+          child: IconTextButton(
+              FluentIcons.play,
+              'Launch',
+              state.currentProfile == null
+                  ? null
+                  : () => context.read<ProfilesBloc>().add(LaunchHK()),
+              buttonType: ButtonType.text),
+        ),
+        tabs: state.profiles
+            .map<Tab>((Profile profile) =>
+                _tab(profile, state.currentProfile == profile.name))
+            .toList(),
+        bodies: state.profiles
+            .map<Widget>((Profile profile) => _tabBody(
+                context, profile, state.currentProfile == profile.name))
+            .toList(),
       );
 
   Tab _tab(Profile profile, bool isCurrent) => Tab(

@@ -7,3 +7,5 @@ class Navigate extends MainEvent {
 }
 
 class AppLoaded extends MainEvent {}
+
+class OpenGitHub extends MainEvent {}
