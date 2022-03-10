@@ -64,9 +64,9 @@ class ProfilesPage extends StatelessWidget {
             ),
             BlocListener<ProfilesBloc, ProfilesState>(
               listenWhen: (oldState, newState) =>
-                  (oldState.isDeletingProfile) ^ (newState.isDeletingProfile),
+                  (oldState.isDoingStuff) ^ (newState.isDoingStuff),
               listener: (context, state) {
-                if (state.isDeletingProfile) {
+                if (state.isDoingStuff) {
                   showDialog(
                     context: context,
                     useRootNavigator: false,
@@ -212,7 +212,29 @@ class ProfilesPage extends StatelessWidget {
                                                 .add(DuplicateModpack(modpack)),
                                           ),
                                           IconTextButton(FluentIcons.delete,
-                                              'Delete', () {}),
+                                              () {
+                                            switch (modpack.deletionSureness) {
+                                              case 0:
+                                                {
+                                                  return 'Delete';
+                                                }
+                                              case 1:
+                                                {
+                                                  return 'Ya sure?';
+                                                }
+                                              case 2:
+                                                {
+                                                  return 'Okay, here we go!';
+                                                }
+                                            }
+                                            return 'ERROR';
+                                          }(),
+                                              modpack.name == 'Vanilla'
+                                                  ? null
+                                                  : () => context
+                                                      .read<ProfilesBloc>()
+                                                      .add(DeleteModpack(
+                                                          profile, modpack))),
                                           IconTextButton(
                                             FluentIcons.folder,
                                             'Show',

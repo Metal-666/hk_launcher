@@ -12,7 +12,7 @@ class ProfilesState {
   final Modpack? newModpack;
   final bool isNewModpackInitializing;
 
-  final bool isDeletingProfile;
+  final bool isDoingStuff;
 
   final List<int> hkVersions = const <int>[14, 15];
 
@@ -23,7 +23,7 @@ class ProfilesState {
       this.modpackLoadError,
       this.newModpack,
       this.isNewModpackInitializing = false,
-      this.isDeletingProfile = false});
+      this.isDoingStuff = false});
 
   ProfilesState copyWith(
           {int Function()? tabIndex,
@@ -34,7 +34,7 @@ class ProfilesState {
           String? Function()? modpackLoadError,
           Modpack? Function()? newModpack,
           bool Function()? isNewModpackInitializing,
-          bool Function()? isDeletingProfile}) =>
+          bool Function()? isDoingStuff}) =>
       ProfilesState(tabIndex == null ? this.tabIndex : tabIndex.call(),
           profiles == null ? this.profiles : profiles.call(),
           newProfile: newProfile == null ? this.newProfile : newProfile.call(),
@@ -51,9 +51,8 @@ class ProfilesState {
           isNewModpackInitializing: isNewModpackInitializing == null
               ? this.isNewModpackInitializing
               : isNewModpackInitializing.call(),
-          isDeletingProfile: isDeletingProfile == null
-              ? this.isDeletingProfile
-              : isDeletingProfile.call());
+          isDoingStuff:
+              isDoingStuff == null ? this.isDoingStuff : isDoingStuff.call());
 }
 
 class Profile {
@@ -134,15 +133,22 @@ class Modpack {
 
   final String? basedOn;
 
-  const Modpack({this.name, this.nameError, this.basedOn});
+  final int deletionSureness;
+
+  const Modpack(
+      {this.name, this.nameError, this.basedOn, this.deletionSureness = 0});
 
   Modpack copyWith({
     String Function()? name,
     String Function()? nameError,
     String Function()? basedOn,
+    int Function()? deletionSureness,
   }) =>
       Modpack(
           name: name == null ? this.name : name.call(),
           nameError: nameError == null ? this.nameError : nameError.call(),
-          basedOn: basedOn == null ? this.basedOn : basedOn.call());
+          basedOn: basedOn == null ? this.basedOn : basedOn.call(),
+          deletionSureness: deletionSureness == null
+              ? this.deletionSureness
+              : deletionSureness.call());
 }
