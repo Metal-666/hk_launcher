@@ -16,7 +16,7 @@ This app aims to solve the problem I struggle with. When playing modded Hollow K
 This is where this app comes to play. It lets you switch between different sets of mods and saves without needing to do any manual copying and remembering what mods you have used for what. Follow the process below to get started.
 
 ## Getting Started
-- Download the [latest release](../../releases/latest) from the releases section
+- Download the artifact from the latest [workflow run](../../actions)
 - Extract and run it
 - Carefully read the disclaimer (read the last point in this list if you've missed it)
 - On the Main page you will see a plus button. Click it to create a new profile
