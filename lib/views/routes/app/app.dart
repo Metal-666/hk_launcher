@@ -52,7 +52,7 @@ class AppPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Text('go fuck yourself',
-                  style: TextStyle(color: Colors.yellow),
+                  style: TextStyle(color: Colors.yellow.darkest),
                   textAlign: TextAlign.center)
             ],
           ),
