@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+//Puts one Expander inside another. Yes, very useful
 class NestedExpander extends StatelessWidget {
   final Widget headerOuter;
   final Widget headerInner;

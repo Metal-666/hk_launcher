@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/data/settings/settings_repository.dart';
-import 'package:quiver/collection.dart';
+import '../../data/settings/settings_repository.dart';
 
 import '../../util/converters.dart';
 import '../profiles/bloc.dart';

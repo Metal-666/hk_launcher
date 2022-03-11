@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/views/routes/app/dialogs/error_dialog.dart';
+import 'error_dialog.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 
+//Shown when creating a new profile
 class NewProfileDialog extends StatefulWidget {
   const NewProfileDialog({Key? key}) : super(key: key);
 
@@ -16,6 +17,7 @@ class NewProfileDialog extends StatefulWidget {
   State<NewProfileDialog> createState() => _NewProfileDialogState();
 }
 
+//Same story as with NewModpackDialog. Have to make this stateful
 class _NewProfileDialogState extends State<NewProfileDialog> {
   final TextEditingController pathController = TextEditingController();
 
@@ -26,7 +28,7 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
           if (state.newProfile?.shouldOverwritePath ?? false) {
             _overwriteControllerText(pathController, state.newProfile?.hkPath);
           }
-
+          //Depending on current creation progress, show an input form, a progress indicator or an error
           return state.isNewProfileInitializing
               ? _newProfileProgress()
               : state.newProfile?.profileError != null

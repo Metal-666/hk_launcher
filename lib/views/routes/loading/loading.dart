@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hk_launcher/views/reusable/responsive_progress_ring.dart';
+import '../../reusable/responsive_progress_ring.dart';
 
 import '../../../bloc/loading/bloc.dart';
 import '../../../bloc/loading/events.dart';
@@ -19,16 +19,19 @@ class LoadingPage extends StatelessWidget {
         },
         builder: (context, state) => state.disclaimer
             ? ContentDialog(
-                title: const Text('Read this! [wip]'),
+                title: const Text('Read this!'),
                 backgroundDismiss: false,
                 content: RichText(
                   text: TextSpan(
                     style: FluentTheme.of(context).typography.bodyLarge,
                     children: const <InlineSpan>[
                       TextSpan(
-                          text: '- Move save files (will be deleted), use '),
+                          text:
+                              'Since this application makes separate save files for all modpacks that you create, your original saves folder will be deleted. The '),
                       WidgetSpan(child: Icon(FluentIcons.folder)),
-                      TextSpan(text: ' button below.')
+                      TextSpan(
+                          text:
+                              ' button below will take you to its location - move it somewhere safe. You can later copy it to a specific modpack.')
                     ],
                   ),
                 ),

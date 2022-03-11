@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hk_launcher/data/settings/settings_repository.dart';
-import 'package:hk_launcher/views/reusable/responsive_progress_ring.dart';
+import '../../../../data/settings/settings_repository.dart';
+import '../../../reusable/responsive_progress_ring.dart';
 
 import '../../../../bloc/settings/bloc.dart';
 import '../../../../bloc/settings/events.dart';
@@ -106,6 +106,7 @@ class SettingsPage extends StatelessWidget {
         ),
       );
 
+  //Really wish this was part of a fluent_ui package
   Widget _setting(BuildContext context, String header, Widget content) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,

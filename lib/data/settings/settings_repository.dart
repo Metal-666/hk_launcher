@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../bloc/profiles/state.dart';
-
+//Acts like a wrapper to SharedPreferences. Used by almost all blocs to store and retrieve data
 class SettingsRepository {
   late SharedPreferences preferences;
 

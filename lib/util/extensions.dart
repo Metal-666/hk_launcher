@@ -13,6 +13,7 @@ extension StringCasingExtension on String {
 }
 
 extension DirectoryExtension on Directory {
+  //Why do I have to write this myself?? Why is this not a standard method??
   Future<Directory> move(String path, {bool deleteSource = false}) async {
     await for (final element in list(recursive: true)) {
       if (element is File) {
@@ -32,9 +33,13 @@ extension DirectoryExtension on Directory {
 
   Future<void> showInExplorer() async =>
       Process.run('explorer.exe', <String>[path]);
+
+  Future<void> selectInExplorer() async =>
+      Process.run('explorer /select,"$path"', <String>[]);
 }
 
 extension LinkExtension on Link {
+  //Essentially combines 'update' and 'create'
   Future<Link> set(String target) async =>
       await exists() ? update(target) : create(target);
 }

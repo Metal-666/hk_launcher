@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+//Essentially combines IconButton and TextButton. Why is this not part of fluent_ui???
 class IconTextButton extends StatelessWidget {
   final IconData iconData;
   final String buttonText;

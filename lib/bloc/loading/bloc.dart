@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/bloc/main/events.dart';
-import 'package:hk_launcher/util/extensions.dart';
-import 'package:hk_launcher/util/hollow_knight.dart';
+import '../../util/extensions.dart';
+import '../../util/hollow_knight.dart';
 
 import '../../data/settings/settings_repository.dart';
 import 'events.dart';
@@ -30,7 +29,7 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
       emit(const LoadingState(true, false));
     });
     on<OpenSavesFolder>(
-        (event, emit) async => Directory(hkSavesPath()).showInExplorer());
+        (event, emit) async => Directory(hkSavesPath()).selectInExplorer());
   }
 
   Future _delayStart() => Future.delayed(const Duration(seconds: 1));

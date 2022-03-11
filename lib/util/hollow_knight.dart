@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+//Most of these methods are used to easily get paths to parts of a HK installation
 String hkExePath(String rootPath, int version) {
   switch (version) {
     case 14:

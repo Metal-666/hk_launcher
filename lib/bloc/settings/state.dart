@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:quiver/collection.dart';
 
 class SettingsState {
   final bool needsRestart;
@@ -8,7 +7,7 @@ class SettingsState {
 
   final bool restoringHK;
 
-  SettingsState(
+  const SettingsState(
       {this.needsRestart = false,
       required this.themeMode,
       this.restoringHK = false});

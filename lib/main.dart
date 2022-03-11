@@ -1,20 +1,15 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hk_launcher/util/converters.dart';
+import 'util/converters.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_size/window_size.dart';
 
 import 'bloc/loading/bloc.dart';
-import 'bloc/loading/state.dart';
-import 'bloc/loading/events.dart';
 import 'bloc/main/bloc.dart';
 import 'bloc/main/events.dart';
-import 'bloc/main/state.dart';
 import 'data/settings/settings_repository.dart';
 import 'views/routes/app/app.dart';
 import 'views/routes/loading/loading.dart';
@@ -72,6 +67,7 @@ Future<void> main() async {
 
   await SystemTheme.accentInstance.load();
 
+  //Adds semi-transparent effect to the window. Unfortunately is currently broken on Windows 10. Hopefully this will be fixed in the future
   /*await Window.initialize();
   await Window.setEffect(
     effect: WindowEffect.acrylic,

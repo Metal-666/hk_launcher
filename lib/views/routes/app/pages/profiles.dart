@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/bloc/profiles/events.dart';
-import 'package:hk_launcher/views/reusable/nested_expander.dart';
-import 'package:hk_launcher/views/reusable/responsive_progress_ring.dart';
-import 'package:hk_launcher/views/routes/app/dialogs/new_modpack.dart';
-import 'package:hk_launcher/views/routes/app/dialogs/new_profile.dart';
+import '../../../../bloc/profiles/events.dart';
+import '../../../reusable/nested_expander.dart';
+import '../../../reusable/responsive_progress_ring.dart';
+import '../dialogs/new_modpack.dart';
+import '../dialogs/new_profile.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/state.dart';
@@ -220,7 +220,7 @@ class ProfilesPage extends StatelessWidget {
                                                 }
                                               case 1:
                                                 {
-                                                  return 'Ya sure?';
+                                                  return 'Ya sure? (Saves for this modpack will be deleted too!)';
                                                 }
                                               case 2:
                                                 {
