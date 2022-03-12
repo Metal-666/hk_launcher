@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-//A ProgressRing that adjust it's diameter to a fraction of screen's shortes side. May sound complicated, but it's really not. It basically adjusts it size to look nice on any display.
+// A ProgressRing that adjust it's diameter to a fraction of screen's shortes side. May sound complicated, but it's really not. It basically adjusts it size to look nice on any display.
 class ResponsiveProgressRing extends StatelessWidget {
   final int fraction;
 

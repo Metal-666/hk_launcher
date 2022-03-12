@@ -6,7 +6,7 @@ import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
 
-//Shown on screen when duplicating a modpack
+// Shown on screen when duplicating a modpack
 class NewModpackDialog extends StatefulWidget {
   final Profile profile;
 
@@ -16,7 +16,7 @@ class NewModpackDialog extends StatefulWidget {
   State<NewModpackDialog> createState() => _NewModpackDialogState();
 }
 
-//Really hate to make this a stateful widget, but I don't see another way around. Basically I have to use TextEditingController to manage a TextBox's state (event though its text is already stored inside bloc's state... uhh...) and it needs to be disposed (only stateful widgets can do this)
+// Really hate to make this a stateful widget, but I don't see another way around. Basically I have to use TextEditingController to manage a TextBox's state (event though its text is already stored inside bloc's state... uhh...) and it needs to be disposed (only stateful widgets can do this)
 class _NewModpackDialogState extends State<NewModpackDialog> {
   final TextEditingController nameController = TextEditingController();
 

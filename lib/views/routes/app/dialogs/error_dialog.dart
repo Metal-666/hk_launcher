@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-//Uhh... this is a dialog.. with 2 text boxes... I guess?
+// Uhh... this is a dialog.. with 2 text boxes... I guess?
 class ErrorDialog extends StatelessWidget {
   final String title;
   final String content;

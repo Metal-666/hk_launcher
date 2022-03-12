@@ -67,7 +67,7 @@ Future<void> main() async {
 
   await SystemTheme.accentInstance.load();
 
-  //Adds semi-transparent effect to the window. Unfortunately is currently broken on Windows 10. Hopefully this will be fixed in the future
+  // Adds semi-transparent effect to the window. Unfortunately is currently broken on Windows 10. Hopefully this will be fixed in the future
   /*await Window.initialize();
   await Window.setEffect(
     effect: WindowEffect.acrylic,

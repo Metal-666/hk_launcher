@@ -9,7 +9,7 @@ import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 
-//Shown when creating a new profile
+// Shown when creating a new profile
 class NewProfileDialog extends StatefulWidget {
   const NewProfileDialog({Key? key}) : super(key: key);
 
@@ -17,7 +17,7 @@ class NewProfileDialog extends StatefulWidget {
   State<NewProfileDialog> createState() => _NewProfileDialogState();
 }
 
-//Same story as with NewModpackDialog. Have to make this stateful
+// Same story as with NewModpackDialog. Have to make this stateful
 class _NewProfileDialogState extends State<NewProfileDialog> {
   final TextEditingController pathController = TextEditingController();
 
@@ -28,7 +28,7 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
           if (state.newProfile?.shouldOverwritePath ?? false) {
             _overwriteControllerText(pathController, state.newProfile?.hkPath);
           }
-          //Depending on current creation progress, show an input form, a progress indicator or an error
+          // Depending on current creation progress, show an input form, a progress indicator or an error
           return state.isNewProfileInitializing
               ? _newProfileProgress()
               : state.newProfile?.profileError != null

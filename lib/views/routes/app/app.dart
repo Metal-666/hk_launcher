@@ -42,7 +42,7 @@ class AppPage extends StatelessWidget {
           ],
         ),
         pane: NavigationPane(
-          //Glory to Ukraine :)
+          // Glory to Ukraine :)
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

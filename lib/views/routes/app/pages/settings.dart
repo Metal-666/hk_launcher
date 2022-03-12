@@ -106,7 +106,7 @@ class SettingsPage extends StatelessWidget {
         ),
       );
 
-  //Really wish this was part of a fluent_ui package
+  // Really wish this was part of a fluent_ui package
   Widget _setting(BuildContext context, String header, Widget content) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,

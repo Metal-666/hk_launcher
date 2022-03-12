@@ -18,7 +18,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       : super(ProfilesState(
             0,
             _settingsRepository.profiles.map<Profile>((profileJson) {
-              //Prepare the profile. Make sure its folder exists and it has a name. Also load its modpacks (probably not the best place to do this, since the loading is synchronous, but I don't care)
+              // Prepare the profile. Make sure its folder exists and it has a name. Also load its modpacks (probably not the best place to do this, since the loading is synchronous, but I don't care)
               final Profile profile = Profile.fromJson(profileJson);
 
               if (profile.hkPath != null || profile.name != null) {
@@ -61,7 +61,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         newProfile: () =>
             state.newProfile?.copyWith(hkVersion: () => event.version))));
     on<SubmitNewTabDialog>((event, emit) async {
-      //Called when the user hits 'Initialize' on the New Profile dialog. Verifies that name and path are valid, creates the necessary directories. If this is the first profile created, selects it.
+      // Called when the user hits 'Initialize' on the New Profile dialog. Verifies that name and path are valid, creates the necessary directories. If this is the first profile created, selects it.
       final String? rootPath = state.newProfile?.hkPath,
           name = state.newProfile?.name;
       final int? version = state.newProfile?.hkVersion;
@@ -113,7 +113,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       }
     });
     on<DeleteProfile>((event, emit) async {
-      //Deletes a profile. Modifies current profile and tab selections to prevent errors (in case user deletes a profile that is currently active)
+      // Deletes a profile. Modifies current profile and tab selections to prevent errors (in case user deletes a profile that is currently active)
       emit(state.copyWith(isDoingStuff: () => true));
 
       ProfilesState newState = state.copyWith(
@@ -147,7 +147,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       _settingsRepository.currentProfile = event.profile.name;
     });
     on<SelectModpack>((event, emit) async {
-      //Called when user switches to another modpack. Makes sure the correct folder are deleted/symlinked, changes modpack selection. If this profile is current, applies all filesystem changes immediately.
+      // Called when user switches to another modpack. Makes sure the correct folder are deleted/symlinked, changes modpack selection. If this profile is current, applies all filesystem changes immediately.
       if (event.profile.selectedModpack != event.modpack.name) {
         if ((await Directory(hkSavesPath()).exists() &&
                 !await Link(hkSavesPath()).exists()) ||
@@ -183,7 +183,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
     on<CloseModpackErrorDialog>(
         (event, emit) => emit(state.copyWith(modpackLoadError: () => null)));
     on<DeleteModpack>((event, emit) async {
-      //Deletes a modpack. First two attempts nothing except the attempt number is changed (used for 'Are you sure? Are you really sure?' text on the Delete button). On the third attempt deletes the modpack folder. If this modpack was current, switches current to Vanilla.
+      // Deletes a modpack. First two attempts nothing except the attempt number is changed (used for 'Are you sure? Are you really sure?' text on the Delete button). On the third attempt deletes the modpack folder. If this modpack was current, switches current to Vanilla.
       if (event.modpack.deletionSureness == 2) {
         emit(state.copyWith(isDoingStuff: () => true));
 
@@ -209,7 +209,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
             profiles: () => List.of(state.profiles)
               ..[state.profiles.indexOf(event.profile)] = profile));
       } else {
-        //I hate this so much. Why, bloc, why??
+        // I hate this so much. Why, bloc, why??
         emit(state.copyWith(
             profiles: () => List.of(state.profiles)
               ..[state.profiles.indexOf(event.profile)] = event.profile
@@ -227,7 +227,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         Directory(hkModpackPath(event.profile.hkPath!, event.modpack.name!))
             .showInExplorer());
     on<SubmitNewModpackDialog>((event, emit) async {
-      //Duplicates a modpack (does some validation first)
+      // Duplicates a modpack (does some validation first)
       final String? modpackError = await _validateModpack(
           event.profile.hkPath!, event.modpack.name?.trim());
 
@@ -362,7 +362,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
           .map<Modpack>((element) => Modpack(name: basename(element.path)))
           .toList();
 
-  //This method is not private because it's also used by the settings bloc when all profiles need to be delted.
+  // This method is not private because it's also used by the settings bloc when all profiles need to be delted.
   static Future<void> deleteProfile(Profile profile) async {
     Link managedLnk = Link(hkManagedPath(profile.hkPath!, profile.hkVersion)),
         savesLnk = Link(hkSavesPath());
