@@ -96,9 +96,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
               isNewProfileInitializing: () => false,
               profiles: () => List.of(state.profiles)..add(newProfile)));
 
-          _settingsRepository.profiles = state.profiles
-              .map<String>((profile) => profile.toJson())
-              .toList();
+          _saveProfiles();
         } on FileSystemException catch (exception) {
           emit(state.copyWith(
               isNewProfileInitializing: () => false,
@@ -172,6 +170,8 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
             emit(state.copyWith(
                 profiles: () => List.of(state.profiles)
                   ..[state.profiles.indexOf(event.profile)] = profile));
+
+            _saveProfiles();
           } on FileSystemException catch (exception) {
             emit(state.copyWith(
                 modpackLoadError: () =>
@@ -261,6 +261,9 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       launchHK(currentProfile.hkPath!, currentProfile.hkVersion);
     }));
   }
+
+  void _saveProfiles() => _settingsRepository.profiles =
+      state.profiles.map<String>((profile) => profile.toJson()).toList();
 
   Future<String?> _validateHKPath(String? path, int version) async {
     if (path == null || path.isEmpty) {
