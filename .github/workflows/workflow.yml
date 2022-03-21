@@ -14,6 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v2.3.0
         with:
           channel: 'stable'
+      - run: git config --global url."https://".insteadOf git://
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get
