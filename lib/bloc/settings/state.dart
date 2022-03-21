@@ -7,15 +7,17 @@ class SettingsState {
 
   final bool restoringHK;
 
-  const SettingsState(
-      {this.needsRestart = false,
-      required this.themeMode,
-      this.restoringHK = false});
+  const SettingsState({
+    this.needsRestart = false,
+    required this.themeMode,
+    this.restoringHK = false,
+  });
 
-  SettingsState copyWith(
-          {bool Function()? needsRestart,
-          ThemeMode Function()? themeMode,
-          bool Function()? restoringHK}) =>
+  SettingsState copyWith({
+    bool Function()? needsRestart,
+    ThemeMode Function()? themeMode,
+    bool Function()? restoringHK,
+  }) =>
       SettingsState(
         needsRestart:
             needsRestart == null ? this.needsRestart : needsRestart.call(),

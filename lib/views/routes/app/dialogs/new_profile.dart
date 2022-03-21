@@ -26,7 +26,10 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
       BlocBuilder<ProfilesBloc, ProfilesState>(
         builder: (context, state) {
           if (state.newProfile?.shouldOverwritePath ?? false) {
-            _overwriteControllerText(pathController, state.newProfile?.hkPath);
+            _overwriteControllerText(
+              pathController,
+              state.newProfile?.hkPath,
+            );
           }
           // Depending on current creation progress, show an input form, a progress indicator or an error
           return state.isNewProfileInitializing
@@ -66,16 +69,16 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
               children: <Widget>[
                 Expanded(
                   child: TextFormBox(
-                      controller: pathController,
-                      autovalidateMode: AutovalidateMode.always,
-                      onChanged: (text) => context
-                          .read<ProfilesBloc>()
-                          .add(ChangeNewProfilePath(text)),
-                      onFieldSubmitted: (_) => context
-                          .read<ProfilesBloc>()
-                          .add(SubmitNewTabDialog()),
-                      validator: (_) => state.newProfile?.pathError,
-                      placeholder: 'Hollow Knight installation path'),
+                    controller: pathController,
+                    autovalidateMode: AutovalidateMode.always,
+                    onChanged: (text) => context
+                        .read<ProfilesBloc>()
+                        .add(ChangeNewProfilePath(text)),
+                    onFieldSubmitted: (_) =>
+                        context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
+                    validator: (_) => state.newProfile?.pathError,
+                    placeholder: 'Hollow Knight installation path',
+                  ),
                 ),
                 FilledButton(
                   child: const Text('Browse'),
@@ -111,7 +114,7 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
             child: const Text('Cancel'),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(CloseNewTabDialog()),
-          )
+          ),
         ],
       );
 

@@ -36,9 +36,10 @@ class SettingsPage extends StatelessWidget {
               listener: (context, state) {
                 if (state.restoringHK) {
                   showDialog(
-                      context: context,
-                      useRootNavigator: false,
-                      builder: (_) => const ResponsiveProgressRing());
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (_) => const ResponsiveProgressRing(),
+                  );
                 } else {
                   Navigator.of(context).pop();
                 }
@@ -47,45 +48,46 @@ class SettingsPage extends StatelessWidget {
           ],
           child: ScaffoldPage.scrollable(
             header: const PageHeader(title: Text('Settings')),
-            children: <Widget>[_themeMode(context), _other(context)],
+            children: <Widget>[
+              _themeMode(context),
+              _other(context),
+            ],
           ),
         ),
       );
 
   Widget _themeMode(BuildContext context) =>
       BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, state) {
-          return _setting(
-            context,
-            'Theme mode',
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: List.generate(
-                ThemeMode.values.length,
-                (index) {
-                  final mode = ThemeMode.values[index];
+        builder: (context, state) => _setting(
+          context,
+          'Theme mode',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(
+              ThemeMode.values.length,
+              (index) {
+                final mode = ThemeMode.values[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: RadioButton(
-                      checked: state.themeMode == mode,
-                      onChanged: (changed) {
-                        if (changed) {
-                          context
-                              .read<SettingsBloc>()
-                              .add(ThemeModeChanged(mode));
-                        }
-                      },
-                      content: Text(
-                          themeModeConverter.inverse[mode]?.toCapitalized() ??
-                              'ERROR'),
-                    ),
-                  );
-                },
-              ),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: RadioButton(
+                    checked: state.themeMode == mode,
+                    onChanged: (changed) {
+                      if (changed) {
+                        context
+                            .read<SettingsBloc>()
+                            .add(ThemeModeChanged(mode));
+                      }
+                    },
+                    content: Text(
+                        themeModeConverter.inverse[mode]?.toCapitalized() ??
+                            'ERROR'),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ),
       );
 
   Widget _other(BuildContext context) =>
@@ -113,7 +115,7 @@ class SettingsPage extends StatelessWidget {
         children: <Widget>[
           Text(header, style: FluentTheme.of(context).typography.subtitle),
           spacer,
-          content
+          content,
         ],
       );
 }

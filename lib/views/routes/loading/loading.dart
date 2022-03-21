@@ -31,7 +31,7 @@ class LoadingPage extends StatelessWidget {
                       WidgetSpan(child: Icon(FluentIcons.folder)),
                       TextSpan(
                           text:
-                              ' button below will take you to its location - move it somewhere safe. You can later copy it to a specific modpack.')
+                              ' button below will take you to its location - move it somewhere safe. You can later copy it to a specific modpack.'),
                     ],
                   ),
                 ),
@@ -53,9 +53,9 @@ class LoadingPage extends StatelessWidget {
                         onPressed: () => context
                             .read<LoadingBloc>()
                             .add(DismissedDisclaimer()),
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               )
             : const ScaffoldPage(content: ResponsiveProgressRing()),

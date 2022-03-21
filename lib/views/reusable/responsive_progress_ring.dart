@@ -22,13 +22,18 @@ class _LayoutDelegate extends SingleChildLayoutDelegate {
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     final double side = constraints.biggest.shortestSide / fraction;
-    return BoxConstraints.expand(width: side, height: side);
+
+    return BoxConstraints.expand(
+      width: side,
+      height: side,
+    );
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) => Offset(
-      (size.width / 2) - (childSize.width / 2),
-      (size.height / 2) - (childSize.height / 2));
+        (size.width / 2) - (childSize.width / 2),
+        (size.height / 2) - (childSize.height / 2),
+      );
 
   @override
   Size getSize(BoxConstraints constraints) => lastSize = constraints.biggest;

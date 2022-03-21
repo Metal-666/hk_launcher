@@ -7,9 +7,13 @@ class IconTextButton extends StatelessWidget {
   final Function()? buttonCallback;
   final ButtonType buttonType;
 
-  const IconTextButton(this.iconData, this.buttonText, this.buttonCallback,
-      {this.buttonType = ButtonType.simple, Key? key})
-      : super(key: key);
+  const IconTextButton(
+    this.iconData,
+    this.buttonText,
+    this.buttonCallback, {
+    this.buttonType = ButtonType.simple,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

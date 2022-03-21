@@ -7,13 +7,13 @@ class NestedExpander extends StatelessWidget {
   final Widget contentOuter;
   final Widget contentInner;
 
-  const NestedExpander(
-      {Key? key,
-      required this.headerOuter,
-      required this.headerInner,
-      required this.contentOuter,
-      required this.contentInner})
-      : super(key: key);
+  const NestedExpander({
+    Key? key,
+    required this.headerOuter,
+    required this.headerInner,
+    required this.contentOuter,
+    required this.contentInner,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Expander(
@@ -22,7 +22,10 @@ class NestedExpander extends StatelessWidget {
           children: [
             contentOuter,
             const SizedBox(height: 15),
-            Expander(header: headerInner, content: contentInner),
+            Expander(
+              header: headerInner,
+              content: contentInner,
+            ),
           ],
         ),
       );

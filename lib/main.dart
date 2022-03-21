@@ -57,8 +57,9 @@ final GoRouter _router = GoRouter(
 );
 
 ThemeData _createTheme({bool darkMode = false}) => ThemeData(
-    brightness: darkMode ? Brightness.dark : Brightness.light,
-    accentColor: SystemTheme.accentInstance.accent.toAccentColor());
+      brightness: darkMode ? Brightness.dark : Brightness.light,
+      accentColor: SystemTheme.accentInstance.accent.toAccentColor(),
+    );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

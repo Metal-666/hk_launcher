@@ -38,24 +38,28 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
           autovalidateMode: AutovalidateMode.always,
           onChanged: (text) =>
               context.read<ProfilesBloc>().add(ChangeNewModpackName(text)),
-          onFieldSubmitted: (_) => context
-              .read<ProfilesBloc>()
-              .add(SubmitNewModpackDialog(widget.profile, state.newModpack!)),
+          onFieldSubmitted: (_) =>
+              context.read<ProfilesBloc>().add(SubmitNewModpackDialog(
+                    widget.profile,
+                    state.newModpack!,
+                  )),
           validator: (_) => state.newModpack?.nameError,
           placeholder: 'Modpack name',
         ),
         actions: <Widget>[
           Button(
             child: const Text('Create'),
-            onPressed: () => context
-                .read<ProfilesBloc>()
-                .add(SubmitNewModpackDialog(widget.profile, state.newModpack!)),
+            onPressed: () =>
+                context.read<ProfilesBloc>().add(SubmitNewModpackDialog(
+                      widget.profile,
+                      state.newModpack!,
+                    )),
           ),
           Button(
             child: const Text('Cancel'),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(CloseNewModpackDialog()),
-          )
+          ),
         ],
       );
 

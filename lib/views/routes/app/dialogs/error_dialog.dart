@@ -7,8 +7,12 @@ class ErrorDialog extends StatelessWidget {
 
   final void Function() onClose;
 
-  const ErrorDialog(this.title, this.content, this.onClose, {Key? key})
-      : super(key: key);
+  const ErrorDialog(
+    this.title,
+    this.content,
+    this.onClose, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ContentDialog(
@@ -22,7 +26,7 @@ class ErrorDialog extends StatelessWidget {
           Button(
             child: const Text('Close'),
             onPressed: onClose,
-          )
+          ),
         ],
       );
 }

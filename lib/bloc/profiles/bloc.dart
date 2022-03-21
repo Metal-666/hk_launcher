@@ -16,26 +16,27 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
   ProfilesBloc(this._settingsRepository)
       : super(ProfilesState(
-            0,
-            _settingsRepository.profiles.map<Profile>((profileJson) {
-              // Prepare the profile. Make sure its folder exists and it has a name. Also load its modpacks (probably not the best place to do this, since the loading is synchronous, but I don't care)
-              final Profile profile = Profile.fromJson(profileJson);
+          0,
+          _settingsRepository.profiles.map<Profile>((profileJson) {
+            // Prepare the profile. Make sure its folder exists and it has a name. Also load its modpacks (probably not the best place to do this, since the loading is synchronous, but I don't care)
+            final Profile profile = Profile.fromJson(profileJson);
 
-              if (profile.hkPath != null || profile.name != null) {
-                final Directory profileDir =
-                    Directory(hkModpacksPath(profile.hkPath!));
+            if (profile.hkPath != null || profile.name != null) {
+              final Directory profileDir =
+                  Directory(hkModpacksPath(profile.hkPath!));
 
-                if (profileDir.existsSync()) {
-                  return profile.copyWith(
-                      modpacks: () => _loadProfileModpacks(profile.hkPath!));
-                }
-
-                return const Profile(profileError: 'Profile not found!');
+              if (profileDir.existsSync()) {
+                return profile.copyWith(
+                    modpacks: () => _loadProfileModpacks(profile.hkPath!));
               }
 
-              return const Profile(profileError: 'This profile is corrupted!');
-            }).toList(),
-            currentProfile: _settingsRepository.currentProfile)) {
+              return const Profile(profileError: 'Profile not found!');
+            }
+
+            return const Profile(profileError: 'This profile is corrupted!');
+          }).toList(),
+          currentProfile: _settingsRepository.currentProfile,
+        )) {
     on<ChangeTab>(
         (event, emit) => emit(state.copyWith(tabIndex: () => event.index)));
     on<AddTab>((event, emit) =>
@@ -47,7 +48,9 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       if (path != null) {
         emit(state.copyWith(
             newProfile: () => state.newProfile?.copyWith(
-                hkPath: () => path, shouldOverwritePath: () => true)));
+                  hkPath: () => path,
+                  shouldOverwritePath: () => true,
+                )));
       }
     });
     on<CloseNewTabDialog>(
@@ -73,41 +76,49 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         emit(state.copyWith(isNewProfileInitializing: () => true));
 
         try {
-          final Directory vanillaModpackDir = Directory(
-              join(hkModpacksPath(state.newProfile!.hkPath!), 'Vanilla'));
+          final Directory vanillaModpackDir = Directory(join(
+            hkModpacksPath(state.newProfile!.hkPath!),
+            'Vanilla',
+          ));
 
           await vanillaModpackDir.create(recursive: true);
           await Directory(hkManagedPath(rootPath!, version!)).move(
-              hkModpackManagedPath(rootPath, 'Vanilla'),
-              deleteSource: true);
+            hkModpackManagedPath(rootPath, 'Vanilla'),
+            deleteSource: true,
+          );
 
           final Profile newProfile = Profile(
-              name: name,
-              hkPath: rootPath,
-              hkVersion: version,
-              modpacks: const <Modpack>[Modpack(name: 'Vanilla')]);
+            name: name,
+            hkPath: rootPath,
+            hkVersion: version,
+            modpacks: const <Modpack>[Modpack(name: 'Vanilla')],
+          );
 
           if (state.profiles.isEmpty) {
             await _selectProfile(newProfile);
           }
 
           emit(state.copyWith(
-              newProfile: () => null,
-              isNewProfileInitializing: () => false,
-              profiles: () => List.of(state.profiles)..add(newProfile)));
+            newProfile: () => null,
+            isNewProfileInitializing: () => false,
+            profiles: () => List.of(state.profiles)..add(newProfile),
+          ));
 
           _saveProfiles();
         } on FileSystemException catch (exception) {
-          emit(state.copyWith(
-              isNewProfileInitializing: () => false,
-              newProfile: () => state.newProfile?.copyWith(
-                  profileError: () =>
-                      exception.osError?.message ?? 'Unknown error')));
+          emit(
+            state.copyWith(
+                isNewProfileInitializing: () => false,
+                newProfile: () => state.newProfile?.copyWith(
+                    profileError: () =>
+                        exception.osError?.message ?? 'Unknown error')),
+          );
         }
       } else {
         emit(state.copyWith(
-            newProfile: () => state.newProfile?.copyWith(
-                nameError: () => nameError, pathError: () => pathError)));
+          newProfile: () => state.newProfile?.copyWith(
+              nameError: () => nameError, pathError: () => pathError),
+        ));
       }
     });
     on<DeleteProfile>((event, emit) async {
@@ -115,9 +126,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       emit(state.copyWith(isDoingStuff: () => true));
 
       ProfilesState newState = state.copyWith(
-          profiles: () => List.of(state.profiles)
-            ..removeWhere((profile) => profile.name == event.profile.name),
-          isDoingStuff: () => false);
+        profiles: () => List.of(state.profiles)
+          ..removeWhere((profile) => profile.name == event.profile.name),
+        isDoingStuff: () => false,
+      );
 
       if (newState.tabIndex == newState.profiles.length &&
           newState.tabIndex != 0) {
@@ -150,11 +162,13 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         if ((await Directory(hkSavesPath()).exists() &&
                 !await Link(hkSavesPath()).exists()) ||
             (await Directory(hkManagedPath(
-                        event.profile.hkPath!, event.profile.hkVersion))
-                    .exists() &&
+                  event.profile.hkPath!,
+                  event.profile.hkVersion,
+                )).exists() &&
                 !await Link(hkManagedPath(
-                        event.profile.hkPath!, event.profile.hkVersion))
-                    .exists())) {
+                  event.profile.hkPath!,
+                  event.profile.hkVersion,
+                )).exists())) {
           emit(state.copyWith(
               modpackLoadError: () =>
                   'It seems like a part of your HK installation hasn\'t been converted for use with this launcher. Please verify that your installation and save files are not corrupted, delete this profile and create it again.'));
@@ -187,9 +201,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       if (event.modpack.deletionSureness == 2) {
         emit(state.copyWith(isDoingStuff: () => true));
 
-        await Directory(
-                hkModpackPath(event.profile.hkPath!, event.modpack.name!))
-            .delete(recursive: true);
+        await Directory(hkModpackPath(
+          event.profile.hkPath!,
+          event.modpack.name!,
+        )).delete(recursive: true);
 
         Profile profile = event.profile;
 
@@ -205,9 +220,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
             modpacks: () => _loadProfileModpacks(profile.hkPath!));
 
         emit(state.copyWith(
-            isDoingStuff: () => false,
-            profiles: () => List.of(state.profiles)
-              ..[state.profiles.indexOf(event.profile)] = profile));
+          isDoingStuff: () => false,
+          profiles: () => List.of(state.profiles)
+            ..[state.profiles.indexOf(event.profile)] = profile,
+        ));
       } else {
         // I hate this so much. Why, bloc, why??
         emit(state.copyWith(
@@ -223,13 +239,16 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
     });
     on<DuplicateModpack>((event, emit) => emit(state.copyWith(
         newModpack: () => Modpack(basedOn: event.modpack.name))));
-    on<ShowModpackInExplorer>((event, emit) =>
-        Directory(hkModpackPath(event.profile.hkPath!, event.modpack.name!))
-            .showInExplorer());
+    on<ShowModpackInExplorer>((event, emit) => Directory(hkModpackPath(
+          event.profile.hkPath!,
+          event.modpack.name!,
+        )).showInExplorer());
     on<SubmitNewModpackDialog>((event, emit) async {
       // Duplicates a modpack (does some validation first)
       final String? modpackError = await _validateModpack(
-          event.profile.hkPath!, event.modpack.name?.trim());
+        event.profile.hkPath!,
+        event.modpack.name?.trim(),
+      );
 
       if (modpackError == null) {
         emit(state.copyWith(isNewModpackInitializing: () => true));
@@ -237,13 +256,12 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
         await _createModpack(event.profile, event.modpack);
 
         emit(state.copyWith(
-            newModpack: () => null,
-            isNewModpackInitializing: () => false,
-            profiles: () => List.of(state.profiles)
-              ..[state.profiles.indexOf(event.profile)] = event.profile
-                  .copyWith(
-                      modpacks: () =>
-                          _loadProfileModpacks(event.profile.hkPath!))));
+          newModpack: () => null,
+          isNewModpackInitializing: () => false,
+          profiles: () => List.of(state.profiles)
+            ..[state.profiles.indexOf(event.profile)] = event.profile.copyWith(
+                modpacks: () => _loadProfileModpacks(event.profile.hkPath!)),
+        ));
       } else {
         emit(state.copyWith(
             newModpack: () =>
@@ -313,30 +331,43 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
   static Future<void> _createModpack(Profile profile, Modpack modpack) async {
     String name = modpack.name!.trim();
 
-    final Directory modpackDir =
-        Directory(hkModpackPath(profile.hkPath!, name));
+    final Directory modpackDir = Directory(hkModpackPath(
+      profile.hkPath!,
+      name,
+    ));
 
     if (await modpackDir.exists()) {
       await modpackDir.delete();
     }
 
-    final Directory basedOnModpackManagedDir =
-        Directory(hkModpackManagedPath(profile.hkPath!, modpack.basedOn!));
+    final Directory basedOnModpackManagedDir = Directory(hkModpackManagedPath(
+      profile.hkPath!,
+      modpack.basedOn!,
+    ));
 
-    await basedOnModpackManagedDir
-        .move(hkModpackManagedPath(profile.hkPath!, name));
+    await basedOnModpackManagedDir.move(hkModpackManagedPath(
+      profile.hkPath!,
+      name,
+    ));
 
-    await Directory(hkModpackSavesPath(profile.hkPath!, name)).create();
+    await Directory(hkModpackSavesPath(
+      profile.hkPath!,
+      name,
+    )).create();
   }
 
   static Future<void> _selectProfile(Profile profile) async {
-    final Directory modpackSavesDir = Directory(
-            hkModpackSavesPath(profile.hkPath!, profile.selectedModpack)),
+    final Directory modpackSavesDir = Directory(hkModpackSavesPath(
+          profile.hkPath!,
+          profile.selectedModpack,
+        )),
         savesDir = Directory(hkSavesPath());
 
     if (await savesDir.exists() && !await Link(hkSavesPath()).exists()) {
-      final String savesBackupPath = join(savesDir.parent.path,
-          'Hollow Knight (← your old saves are here. I told you to move them! Next time they will go YEET)');
+      final String savesBackupPath = join(
+        savesDir.parent.path,
+        'Hollow Knight (← your old saves are here. I told you to move them! Next time they will go YEET)',
+      );
 
       if (await Directory(savesBackupPath).exists()) {
         await savesDir.delete(recursive: true);
@@ -349,10 +380,17 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       await modpackSavesDir.create();
     }
 
-    await Link(hkSavesPath())
-        .set(hkModpackSavesPath(profile.hkPath!, profile.selectedModpack));
-    await Link(hkManagedPath(profile.hkPath!, profile.hkVersion))
-        .set(hkModpackManagedPath(profile.hkPath!, profile.selectedModpack));
+    await Link(hkSavesPath()).set(hkModpackSavesPath(
+      profile.hkPath!,
+      profile.selectedModpack,
+    ));
+    await Link(hkManagedPath(
+      profile.hkPath!,
+      profile.hkVersion,
+    )).set(hkModpackManagedPath(
+      profile.hkPath!,
+      profile.selectedModpack,
+    ));
   }
 
   static List<Modpack> _loadProfileModpacks(String rootPath) =>
@@ -367,7 +405,10 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
   // This method is not private because it's also used by the settings bloc when all profiles need to be delted.
   static Future<void> deleteProfile(Profile profile) async {
-    Link managedLnk = Link(hkManagedPath(profile.hkPath!, profile.hkVersion)),
+    Link managedLnk = Link(hkManagedPath(
+          profile.hkPath!,
+          profile.hkVersion,
+        )),
         savesLnk = Link(hkSavesPath());
 
     if (await managedLnk.exists()) {
@@ -378,8 +419,13 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       await savesLnk.delete();
     }
 
-    await Directory(hkModpackManagedPath(profile.hkPath!, 'Vanilla'))
-        .move(hkManagedPath(profile.hkPath!, profile.hkVersion));
+    await Directory(hkModpackManagedPath(
+      profile.hkPath!,
+      'Vanilla',
+    )).move(hkManagedPath(
+      profile.hkPath!,
+      profile.hkVersion,
+    ));
 
     await Directory(hkModpacksPath(profile.hkPath!)).delete(recursive: true);
   }

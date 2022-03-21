@@ -31,7 +31,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       _settingsRepository.profiles = null;
 
-      emit(state.copyWith(restoringHK: () => false, needsRestart: () => true));
+      emit(state.copyWith(
+        restoringHK: () => false,
+        needsRestart: () => true,
+      ));
     });
   }
 }

@@ -51,9 +51,11 @@ class AppPage extends StatelessWidget {
                 style: TextStyle(color: Colors.blue),
                 textAlign: TextAlign.center,
               ),
-              Text('go fuck yourself',
-                  style: TextStyle(color: Colors.yellow.darkest),
-                  textAlign: TextAlign.center)
+              Text(
+                'go fuck yourself',
+                style: TextStyle(color: Colors.yellow.darkest),
+                textAlign: TextAlign.center,
+              )
             ],
           ),
           footerItems: <NavigationPaneItem>[
@@ -69,7 +71,7 @@ class AppPage extends StatelessWidget {
             PaneItem(
               icon: const Icon(FluentIcons.project_collection),
               title: const Text('Profiles'),
-            )
+            ),
           ],
         ),
       );

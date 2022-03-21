@@ -13,8 +13,10 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
 
   LoadingBloc(this._settingsRepository)
       : super(const LoadingState(false, false)) {
-    Future.wait(<Future>[_settingsRepository.init(), _delayStart()])
-        .then((value) => add(LoadingFinished()));
+    Future.wait(<Future>[
+      _settingsRepository.init(),
+      _delayStart(),
+    ]).then((value) => add(LoadingFinished()));
 
     on<LoadingFinished>((event, emit) {
       if (_settingsRepository.seenDisclaimer) {

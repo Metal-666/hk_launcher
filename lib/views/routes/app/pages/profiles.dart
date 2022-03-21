@@ -108,20 +108,26 @@ class ProfilesPage extends StatelessWidget {
         footer: Tooltip(
           message: 'Launch current profile',
           child: IconTextButton(
-              FluentIcons.play,
-              'Launch',
-              state.currentProfile == null
-                  ? null
-                  : () => context.read<ProfilesBloc>().add(LaunchHK()),
-              buttonType: ButtonType.text),
+            FluentIcons.play,
+            'Launch',
+            state.currentProfile == null
+                ? null
+                : () => context.read<ProfilesBloc>().add(LaunchHK()),
+            buttonType: ButtonType.text,
+          ),
         ),
         tabs: state.profiles
-            .map<Tab>((Profile profile) =>
-                _tab(profile, state.currentProfile == profile.name))
+            .map<Tab>((profile) => _tab(
+                  profile,
+                  state.currentProfile == profile.name,
+                ))
             .toList(),
         bodies: state.profiles
-            .map<Widget>((Profile profile) => _tabBody(
-                context, profile, state.currentProfile == profile.name))
+            .map<Widget>((profile) => _tabBody(
+                  context,
+                  profile,
+                  state.currentProfile == profile.name,
+                ))
             .toList(),
       );
 
@@ -176,7 +182,7 @@ class ProfilesPage extends StatelessWidget {
                               onPressed: () => context
                                   .read<ProfilesBloc>()
                                   .add(MakeProfileCurrent(profile)),
-                            )
+                            ),
                     ],
                   ),
                   InfoLabel(
@@ -211,30 +217,33 @@ class ProfilesPage extends StatelessWidget {
                                                 .read<ProfilesBloc>()
                                                 .add(DuplicateModpack(modpack)),
                                           ),
-                                          IconTextButton(FluentIcons.delete,
-                                              () {
-                                            switch (modpack.deletionSureness) {
-                                              case 0:
-                                                {
-                                                  return 'Delete';
-                                                }
-                                              case 1:
-                                                {
-                                                  return 'Ya sure? (Saves for this modpack will be deleted too!)';
-                                                }
-                                              case 2:
-                                                {
-                                                  return 'Okay, here we go!';
-                                                }
-                                            }
-                                            return 'ERROR';
-                                          }(),
-                                              modpack.name == 'Vanilla'
-                                                  ? null
-                                                  : () => context
-                                                      .read<ProfilesBloc>()
-                                                      .add(DeleteModpack(
-                                                          profile, modpack))),
+                                          IconTextButton(
+                                            FluentIcons.delete,
+                                            () {
+                                              switch (
+                                                  modpack.deletionSureness) {
+                                                case 0:
+                                                  {
+                                                    return 'Delete';
+                                                  }
+                                                case 1:
+                                                  {
+                                                    return 'Ya sure? (Saves for this modpack will be deleted too!)';
+                                                  }
+                                                case 2:
+                                                  {
+                                                    return 'Okay, here we go!';
+                                                  }
+                                              }
+                                              return 'ERROR';
+                                            }(),
+                                            modpack.name == 'Vanilla'
+                                                ? null
+                                                : () => context
+                                                    .read<ProfilesBloc>()
+                                                    .add(DeleteModpack(
+                                                        profile, modpack)),
+                                          ),
                                           IconTextButton(
                                             FluentIcons.folder,
                                             'Show',
@@ -242,7 +251,7 @@ class ProfilesPage extends StatelessWidget {
                                                 .read<ProfilesBloc>()
                                                 .add(ShowModpackInExplorer(
                                                     profile, modpack)),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
