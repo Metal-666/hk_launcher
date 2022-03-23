@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:hk_launcher/views/routes/app/pages/saves.dart';
 
 import '../../../bloc/main/bloc.dart';
 import '../../../bloc/main/events.dart';
@@ -38,6 +39,7 @@ class AppPage extends StatelessWidget {
           index: state.navIndex,
           children: const <Widget>[
             ProfilesPage(),
+            SavesPage(),
             SettingsPage(),
           ],
         ),
@@ -58,12 +60,6 @@ class AppPage extends StatelessWidget {
               )
             ],
           ),
-          footerItems: <NavigationPaneItem>[
-            PaneItem(
-              icon: const Icon(FluentIcons.settings),
-              title: const Text('Settings'),
-            )
-          ],
           selected: state.navIndex,
           onChanged: (int index) =>
               context.read<MainBloc>().add(Navigate(index)),
@@ -72,6 +68,16 @@ class AppPage extends StatelessWidget {
               icon: const Icon(FluentIcons.project_collection),
               title: const Text('Profiles'),
             ),
+            PaneItem(
+              icon: const Icon(FluentIcons.save),
+              title: const Text('Saves'),
+            ),
+          ],
+          footerItems: <NavigationPaneItem>[
+            PaneItem(
+              icon: const Icon(FluentIcons.settings),
+              title: const Text('Settings'),
+            )
           ],
         ),
       );
