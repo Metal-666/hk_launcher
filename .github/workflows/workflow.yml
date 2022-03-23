@@ -18,6 +18,7 @@ jobs:
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get
+      - run: powershell -Command "(gc D:\a\hk_launcher\hk_launcher\windows\flutter\ephemeral\.plugin_symlinks\system_theme\windows\system_theme_plugin.cpp) -replace 'GetDarkModeEnabled', 'GetAppDarkModeEnabled' | Out-File D:\a\hk_launcher\hk_launcher\windows\flutter\ephemeral\.plugin_symlinks\system_theme\windows\system_theme_plugin.cpp"
       - run: flutter build windows
       - uses: actions/upload-artifact@v3
         with:
