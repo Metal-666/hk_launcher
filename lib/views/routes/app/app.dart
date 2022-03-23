@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:hk_launcher/views/routes/app/pages/saves.dart';
+import 'package:hk_launcher/util/translations.dart';
+import 'pages/saves.dart';
 
 import '../../../bloc/main/bloc.dart';
 import '../../../bloc/main/events.dart';
@@ -49,12 +50,12 @@ class AppPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                'Russian warship',
+                tr(['navigation_panel', 'warship-1']),
                 style: TextStyle(color: Colors.blue),
                 textAlign: TextAlign.center,
               ),
               Text(
-                'go fuck yourself',
+                tr(['navigation_panel', 'warship-2']),
                 style: TextStyle(color: Colors.yellow.darkest),
                 textAlign: TextAlign.center,
               )
@@ -66,17 +67,17 @@ class AppPage extends StatelessWidget {
           items: <NavigationPaneItem>[
             PaneItem(
               icon: const Icon(FluentIcons.project_collection),
-              title: const Text('Profiles'),
+              title: Text(tr(['navigation_panel', 'profiles'])),
             ),
             PaneItem(
               icon: const Icon(FluentIcons.save),
-              title: const Text('Saves'),
+              title: Text(tr(['navigation_panel', 'saves'])),
             ),
           ],
           footerItems: <NavigationPaneItem>[
             PaneItem(
               icon: const Icon(FluentIcons.settings),
-              title: const Text('Settings'),
+              title: Text(tr(['navigation_panel', 'settings'])),
             )
           ],
         ),

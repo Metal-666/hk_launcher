@@ -1,0 +1,121 @@
+{
+    "locales": {
+        "en": "English",
+        "uk": "Українська"
+    },
+    "translations": {
+        "navigation_panel": {
+            "warship-1": {
+                "en": "Russian warship"
+            },
+            "warship-2": {
+                "en": "go fuck yourself"
+            },
+            "profiles": {
+                "en": "Profiles"
+            },
+            "saves": {
+                "en": "Saves"
+            },
+            "settings": {
+                "en": "Settings"
+            }
+        },
+        "pages": {
+            "profiles": {
+                "tab_strip": {
+                    "launch": {
+                        "en": "Launch"
+                    }
+                },
+                "content": {
+                    "current_button": {
+                        "selected": {
+                            "en": "This is your current profile"
+                        },
+                        "unselected": {
+                            "en": "Make current"
+                        }
+                    },
+                    "modpacks": {
+                        "header": {
+                            "en": "Modpacks"
+                        },
+                        "item": {
+                            "expanded": {
+                                "duplicate": {
+                                    "en": "Duplicate"
+                                },
+                                "delete": {
+                                    "en": "Delete"
+                                },
+                                "show": {
+                                    "en": "Show"
+                                }
+                            }
+                        }
+                    },
+                    "manage": {
+                        "header": {
+                            "en": "Manage"
+                        },
+                        "expander": {
+                            "header": {
+                                "en": "Delete this profile?"
+                            },
+                            "content": "",
+                            "expanded": {
+                                "header": {
+                                    "en": "I read the text above"
+                                },
+                                "button": {
+                                    "en": "Yeet"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "saves": {
+                "open": {
+                    "en": "Open Location In Explorer"
+                },
+                "copy": {
+                    "en": "Copy Location To Clipboard"
+                },
+                "backup": {
+                    "en": "Backup"
+                }
+            },
+            "settings": {
+                "theme_mode": {
+                    "header": {
+                        "en": "Theme mode"
+                    },
+                    "options": {
+                        "system": {
+                            "en": "System"
+                        },
+                        "light": {
+                            "en": "Light"
+                        },
+                        "dark": {
+                            "en": "Dark"
+                        }
+                    }
+                },
+                "language": {
+                    "en": "Language"
+                },
+                "other": {
+                    "header": {
+                        "en": "Other"
+                    },
+                    "restore": {
+                        "en": "Restore Hollow Knight"
+                    }
+                }
+            }
+        }
+    }
+}

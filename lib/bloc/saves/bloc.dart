@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/util/extensions.dart';
-import 'package:hk_launcher/util/hollow_knight.dart';
+import '../../util/extensions.dart';
+import '../../util/hollow_knight.dart';
 
 import 'events.dart';
 import 'state.dart';

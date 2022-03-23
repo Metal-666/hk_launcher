@@ -25,6 +25,16 @@ class SettingsRepository {
     }
   }
 
+  String? get locale => preferences.getString(_Settings.locale);
+
+  set locale(String? locale) {
+    if (locale == null) {
+      preferences.remove(_Settings.locale);
+    } else {
+      preferences.setString(_Settings.locale, locale);
+    }
+  }
+
   String? get currentProfile => preferences.getString(_Settings.currentProfile);
 
   set currentProfile(String? currentProfile) {
@@ -47,5 +57,6 @@ class _Settings {
   static const String profiles = 'profiles',
       themeMode = 'themeMode',
       currentProfile = 'currentProfile',
-      seenDisclaimer = 'seenDisclaimer';
+      seenDisclaimer = 'seenDisclaimer',
+      locale = 'locale';
 }

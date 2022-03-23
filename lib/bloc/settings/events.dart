@@ -8,4 +8,10 @@ class ThemeModeChanged extends SettingsEvent {
   ThemeModeChanged(this.themeMode);
 }
 
+class LocaleChanged extends SettingsEvent {
+  final String locale;
+
+  LocaleChanged(this.locale);
+}
+
 class RestoreHK extends SettingsEvent {}

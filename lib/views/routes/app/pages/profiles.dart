@@ -1,18 +1,17 @@
-import 'dart:developer';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/profiles/events.dart';
-import '../../../reusable/nested_expander.dart';
-import '../../../reusable/responsive_progress_ring.dart';
-import '../dialogs/new_modpack.dart';
-import '../dialogs/new_profile.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
+import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../../data/settings/settings_repository.dart';
+import '../../../../util/translations.dart';
 import '../../../reusable/icon_text_button.dart';
+import '../../../reusable/nested_expander.dart';
+import '../../../reusable/responsive_progress_ring.dart';
 import '../dialogs/error_dialog.dart';
+import '../dialogs/new_modpack.dart';
+import '../dialogs/new_profile.dart';
 
 class ProfilesPage extends StatelessWidget {
   const ProfilesPage({Key? key}) : super(key: key);
@@ -81,10 +80,11 @@ class ProfilesPage extends StatelessWidget {
           child: BlocBuilder<ProfilesBloc, ProfilesState>(
             builder: (context, state) => ScaffoldPage(
               padding: EdgeInsets.zero,
-              header: const Mica(
+              header: Mica(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: PageHeader(title: Text('Profiles')),
+                  padding: const EdgeInsets.only(top: 16),
+                  child: PageHeader(
+                      title: Text(tr(['navigation_panel', 'profiles']))),
                 ),
               ),
               content: Mica(
@@ -109,7 +109,7 @@ class ProfilesPage extends StatelessWidget {
           message: 'Launch current profile',
           child: IconTextButton(
             FluentIcons.play,
-            'Launch',
+            tr(['pages', 'profiles', 'tab_strip', 'launch']),
             state.currentProfile == null
                 ? null
                 : () => context.read<ProfilesBloc>().add(LaunchHK()),

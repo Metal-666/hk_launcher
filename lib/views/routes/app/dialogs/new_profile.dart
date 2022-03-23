@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'error_dialog.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
 import '../../../reusable/responsive_progress_ring.dart';
+import 'error_dialog.dart';
 
 // Shown when creating a new profile
 class NewProfileDialog extends StatefulWidget {

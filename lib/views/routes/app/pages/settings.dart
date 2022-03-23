@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hk_launcher/util/translations.dart';
 import '../../../../data/settings/settings_repository.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 
@@ -47,9 +48,11 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
           child: ScaffoldPage.scrollable(
-            header: const PageHeader(title: Text('Settings')),
+            header:
+                PageHeader(title: Text(tr(['navigation_panel', 'settings']))),
             children: <Widget>[
               _themeMode(context),
+              _language(context),
               _other(context),
             ],
           ),
@@ -60,7 +63,7 @@ class SettingsPage extends StatelessWidget {
       BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) => _setting(
           context,
-          'Theme mode',
+          tr(['pages', 'settings', 'theme_mode', 'header']),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: List.generate(
@@ -90,13 +93,31 @@ class SettingsPage extends StatelessWidget {
         ),
       );
 
+  Widget _language(BuildContext context) =>
+      BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, state) => _setting(
+          context,
+          tr(['pages', 'settings', 'language']),
+          DropDownButton(
+              title: Text(locales[currentLocale] ?? 'ERROR'),
+              items: locales.keys
+                  .map<DropDownButtonItem>((locale) => DropDownButtonItem(
+                        title: Text(locales[locale] ?? 'ERROR'),
+                        onTap: () => context
+                            .read<SettingsBloc>()
+                            .add(LocaleChanged(locale)),
+                      ))
+                  .toList()),
+        ),
+      );
+
   Widget _other(BuildContext context) =>
       BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) => _setting(
           context,
-          'Other',
+          tr(['pages', 'settings', 'other', 'header']),
           NestedExpander(
-            headerOuter: const Text('Restore Hollow Knight'),
+            headerOuter: Text(tr(['settings', 'other', 'restore'])),
             contentOuter: const Text(
                 'This will simply delete all your profiles. As usual, you will need to restore your original save files yourself.'),
             headerInner: const Text('Proceed'),
