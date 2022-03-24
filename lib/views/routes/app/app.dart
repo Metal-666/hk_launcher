@@ -50,12 +50,18 @@ class AppPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                tr(['navigation_panel', 'warship-1']),
+                tr([
+                  'navigation_panel',
+                  'warship-1',
+                ]),
                 style: TextStyle(color: Colors.blue),
                 textAlign: TextAlign.center,
               ),
               Text(
-                tr(['navigation_panel', 'warship-2']),
+                tr([
+                  'navigation_panel',
+                  'warship-2',
+                ]),
                 style: TextStyle(color: Colors.yellow.darkest),
                 textAlign: TextAlign.center,
               )
@@ -67,17 +73,26 @@ class AppPage extends StatelessWidget {
           items: <NavigationPaneItem>[
             PaneItem(
               icon: const Icon(FluentIcons.project_collection),
-              title: Text(tr(['navigation_panel', 'profiles'])),
+              title: Text(tr([
+                'navigation_panel',
+                'profiles',
+              ])),
             ),
             PaneItem(
               icon: const Icon(FluentIcons.save),
-              title: Text(tr(['navigation_panel', 'saves'])),
+              title: Text(tr([
+                'navigation_panel',
+                'saves',
+              ])),
             ),
           ],
           footerItems: <NavigationPaneItem>[
             PaneItem(
               icon: const Icon(FluentIcons.settings),
-              title: Text(tr(['navigation_panel', 'settings'])),
+              title: Text(tr([
+                'navigation_panel',
+                'settings',
+              ])),
             )
           ],
         ),

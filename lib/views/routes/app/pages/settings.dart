@@ -48,8 +48,11 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
           child: ScaffoldPage.scrollable(
-            header:
-                PageHeader(title: Text(tr(['navigation_panel', 'settings']))),
+            header: PageHeader(
+                title: Text(tr([
+              'navigation_panel',
+              'settings',
+            ]))),
             children: <Widget>[
               _themeMode(context),
               _language(context),
@@ -63,7 +66,12 @@ class SettingsPage extends StatelessWidget {
       BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) => _setting(
           context,
-          tr(['pages', 'settings', 'theme_mode', 'header']),
+          tr([
+            'pages',
+            'settings',
+            'theme_mode',
+            'header',
+          ]),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: List.generate(
@@ -82,9 +90,13 @@ class SettingsPage extends StatelessWidget {
                             .add(ThemeModeChanged(mode));
                       }
                     },
-                    content: Text(
-                        themeModeConverter.inverse[mode]?.toCapitalized() ??
-                            'ERROR'),
+                    content: Text(tr([
+                      'pages',
+                      'settings',
+                      'theme_mode',
+                      'options',
+                      themeModeConverter.inverse[mode] ?? 'error',
+                    ])),
                   ),
                 );
               },
@@ -97,7 +109,11 @@ class SettingsPage extends StatelessWidget {
       BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) => _setting(
           context,
-          tr(['pages', 'settings', 'language']),
+          tr([
+            'pages',
+            'settings',
+            'language',
+          ]),
           DropDownButton(
               title: Text(locales[currentLocale] ?? 'ERROR'),
               items: locales.keys
@@ -115,14 +131,44 @@ class SettingsPage extends StatelessWidget {
       BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) => _setting(
           context,
-          tr(['pages', 'settings', 'other', 'header']),
+          tr([
+            'pages',
+            'settings',
+            'other',
+            'header',
+          ]),
           NestedExpander(
-            headerOuter: Text(tr(['settings', 'other', 'restore'])),
-            contentOuter: const Text(
-                'This will simply delete all your profiles. As usual, you will need to restore your original save files yourself.'),
-            headerInner: const Text('Proceed'),
+            headerOuter: Text(tr([
+              'pages',
+              'settings',
+              'other',
+              'expander',
+              'header',
+            ])),
+            contentOuter: Text(tr([
+              'pages',
+              'settings',
+              'other',
+              'expander',
+              'content',
+            ])),
+            headerInner: Text(tr([
+              'pages',
+              'settings',
+              'other',
+              'expander',
+              'expander',
+              'header',
+            ])),
             contentInner: FilledButton(
-              child: const Text('Yeeeeeet'),
+              child: Text(tr([
+                'pages',
+                'settings',
+                'other',
+                'expander',
+                'expander',
+                'button',
+              ])),
               onPressed: () => context.read<SettingsBloc>().add(RestoreHK()),
             ),
           ),

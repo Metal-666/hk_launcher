@@ -6,67 +6,105 @@
     "translations": {
         "navigation_panel": {
             "warship-1": {
-                "en": "Russian warship"
+                "en": "Russian warship",
+                "uk": "Російський корабель"
             },
             "warship-2": {
-                "en": "go fuck yourself"
+                "en": "go fuck yourself",
+                "uk": "іди нахуй"
             },
             "profiles": {
-                "en": "Profiles"
+                "en": "Profiles",
+                "uk": "Профілі"
             },
             "saves": {
-                "en": "Saves"
+                "en": "Saves",
+                "uk": "Файли Збереження"
             },
             "settings": {
-                "en": "Settings"
+                "en": "Settings",
+                "uk": "Налаштування"
             }
         },
         "pages": {
             "profiles": {
                 "tab_strip": {
                     "launch": {
-                        "en": "Launch"
+                        "en": "Launch",
+                        "uk": "Запуск"
                     }
                 },
                 "content": {
                     "current_button": {
                         "selected": {
-                            "en": "This is your current profile"
+                            "en": "This is your current profile",
+                            "uk": "Це ваш поточний профіль"
                         },
                         "unselected": {
-                            "en": "Make current"
+                            "en": "Make current",
+                            "uk": "Зробити поточним"
                         }
                     },
                     "modpacks": {
                         "header": {
-                            "en": "Modpacks"
+                            "en": "Modpacks",
+                            "uk": "Збірки"
                         },
                         "item": {
-                            "expanded": {
+                            "expander": {
                                 "duplicate": {
-                                    "en": "Duplicate"
+                                    "en": "Duplicate",
+                                    "uk": "Дублювати"
                                 },
                                 "delete": {
-                                    "en": "Delete"
+                                    "0": {
+                                        "en": "Delete",
+                                        "uk": "Видалити"
+                                    },
+                                    "1": {
+                                        "en": "Ya sure? (Saves for this modpack will be deleted too!)",
+                                        "uk": "Впевнені? (Файли збереження цієї збірки теж будуть видалені!)"
+                                    },
+                                    "2": {
+                                        "en": "Okay, here we go!",
+                                        "uk": "Добре, видаляємо!"
+                                    }
                                 },
                                 "show": {
-                                    "en": "Show"
+                                    "en": "Show",
+                                    "uk": "Показати"
                                 }
                             }
                         }
                     },
                     "manage": {
                         "header": {
-                            "en": "Manage"
+                            "en": "Manage",
+                            "uk": "Управління"
                         },
                         "expander": {
                             "header": {
-                                "en": "Delete this profile?"
+                                "en": "Delete this profile?",
+                                "uk": "Видалити цей профіль?"
                             },
-                            "content": "",
-                            "expanded": {
+                            "content": {
+                                "part-1": {
+                                    "en": "Game files for this installation will be restored from the Vanilla modpack, then all modpacks will be deleted. ALL save files will be deleted too! If you want to keep any of the save files, go back and use the ",
+                                    "uk": "Файли гри будуть відтворені згідно зі збіркою Vanilla, потім всі збірки будуть видалені. ВСІ файли збереження будуть також видалені! Якщо ви хочете зберегти якісь із них, використайте кнопку "
+                                },
+                                "button-label": {
+                                    "en": " Show",
+                                    "uk": " Показати"
+                                },
+                                "part-2": {
+                                    "en": " button under the respective modpack to manually copy them to a safe place. This changes affect only this installation, other profiles will not be touched",
+                                    "uk": " поряд зі збіркою що має ваші файли збереження. Ці зміни відносяться тільки до файлів гри, асоційованої з цим профілем"
+                                }
+                            },
+                            "expander": {
                                 "header": {
-                                    "en": "I read the text above"
+                                    "en": "I read the text above",
+                                    "uk": "Я прочитав текст вище"
                                 },
                                 "button": {
                                     "en": "Yeet"
@@ -78,41 +116,152 @@
             },
             "saves": {
                 "open": {
-                    "en": "Open Location In Explorer"
+                    "en": "Open Location In Explorer",
+                    "uk": "Показати розташування у Провіднику"
                 },
                 "copy": {
-                    "en": "Copy Location To Clipboard"
+                    "en": "Copy Location To Clipboard",
+                    "uk": "Копіювати розташування до буферу обміну"
                 },
                 "backup": {
-                    "en": "Backup"
+                    "en": "Backup",
+                    "uk": "Зробити бекап"
                 }
             },
             "settings": {
                 "theme_mode": {
                     "header": {
-                        "en": "Theme mode"
+                        "en": "Theme mode",
+                        "uk": "Режим теми"
                     },
                     "options": {
                         "system": {
-                            "en": "System"
+                            "en": "System",
+                            "uk": "Системний"
                         },
                         "light": {
-                            "en": "Light"
+                            "en": "Light",
+                            "uk": "Світлий"
                         },
                         "dark": {
-                            "en": "Dark"
+                            "en": "Dark",
+                            "uk": "Темний"
+                        },
+                        "error": {
+                            "en": "ERROR",
+                            "uk": "ПОМИЛКА"
                         }
                     }
                 },
                 "language": {
-                    "en": "Language"
+                    "en": "Language",
+                    "uk": "Мова"
                 },
                 "other": {
                     "header": {
-                        "en": "Other"
+                        "en": "Other",
+                        "uk": "Інше"
                     },
-                    "restore": {
-                        "en": "Restore Hollow Knight"
+                    "expander": {
+                        "header": {
+                            "en": "Restore Hollow Knight",
+                            "uk": "Повернути гру до початкового стану"
+                        },
+                        "content": {
+                            "en": "This will simply delete all your profiles. As usual, you will need to restore your original save files yourself",
+                            "uk": "Ця функція просто видалить всі ваші профілі. Як завжди, вам знадобиться зберегти і відновити файли збереження самостійно"
+                        },
+                        "expander": {
+                            "header": {
+                                "en": "Proceed",
+                                "uk": "Продовжити"
+                            },
+                            "button": {
+                                "en": "Yeeeeeet"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "dialogs": {
+            "new_profile": {
+                "title": {
+                    "en": "New profile",
+                    "uk": "Новий профіль"
+                },
+                "content": {
+                    "form": {
+                        "name": {
+                            "placeholder": {
+                                "en": "Profile name",
+                                "uk": "Ім'я профілю"
+                            }
+                        },
+                        "path": {
+                            "placeholder": {
+                                "en": "Hollow Knight installation path",
+                                "uk": "Путь встановлення Hollow Knight"
+                            },
+                            "button": {
+                                "en": "Browse",
+                                "uk": "Обрати"
+                            }
+                        },
+                        "version": {
+                            "en": "Hollow Knight Version: ",
+                            "uk": "Версія Hollow Knight: "
+                        }
+                    }
+                },
+                "actions": {
+                    "initialize": {
+                        "en": "Initialize",
+                        "uk": "Інітіалізувати"
+                    },
+                    "cancel": {
+                        "en": "Cancel",
+                        "uk": "Відмінити"
+                    }
+                }
+            },
+            "new_modpack": {
+                "title": {
+                    "new_modpack": {
+                        "en": "New modpack",
+                        "uk": "Нова збірка"
+                    },
+                    "based_on": {
+                        "en": "based on",
+                        "uk": "основана на"
+                    }
+                },
+                "content": {
+                    "form": {
+                        "name": {
+                            "placeholder": {
+                                "en": "Modpack name",
+                                "uk": "Ім'я збірки"
+                            }
+                        }
+                    }
+                },
+                "actions": {
+                    "create": {
+                        "en": "Create",
+                        "uk": "Створити"
+                    },
+                    "cancel": {
+                        "en": "Cancel",
+                        "uk": "Відмінити"
+                    }
+                }
+            },
+            "error": {
+                "actions": {
+                    "close": {
+                        "en": "Close",
+                        "uk": "Закрити"
                     }
                 }
             }

@@ -18,26 +18,41 @@ class SavesPage extends StatelessWidget {
             header: Mica(
               child: Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child:
-                    PageHeader(title: Text(tr(['navigation_panel', 'saves']))),
+                child: PageHeader(
+                    title: Text(tr([
+                  'navigation_panel',
+                  'saves',
+                ]))),
               ),
             ),
             children: <Widget>[
               const SizedBox(height: 20),
               FilledButton(
-                child: Text(tr(['pages', 'saves', 'open'])),
+                child: Text(tr([
+                  'pages',
+                  'saves',
+                  'open',
+                ])),
                 onPressed: () =>
                     context.read<SavesBloc>().add(OpenLocationInExplorer()),
               ),
               _spacer(),
               FilledButton(
-                child: Text(tr(['pages', 'saves', 'copy'])),
+                child: Text(tr([
+                  'pages',
+                  'saves',
+                  'copy',
+                ])),
                 onPressed: () =>
                     context.read<SavesBloc>().add(CopyLocationToClipboard()),
               ),
               _spacer(),
               FilledButton(
-                child: Text(tr(['pages', 'saves', 'backup'])),
+                child: Text(tr([
+                  'pages',
+                  'saves',
+                  'backup',
+                ])),
                 onPressed: state.backupCooldown
                     ? null
                     : () => context.read<SavesBloc>().add(Backup()),

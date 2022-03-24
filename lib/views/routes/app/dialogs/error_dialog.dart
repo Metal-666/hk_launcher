@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../../util/translations.dart';
+
 // Uhh... this is a dialog.. with 2 text boxes... I guess?
 class ErrorDialog extends StatelessWidget {
   final String title;
@@ -24,7 +26,12 @@ class ErrorDialog extends StatelessWidget {
         ),
         actions: <Widget>[
           Button(
-            child: const Text('Close'),
+            child: Text(tr([
+              'dialogs',
+              'error',
+              'actions',
+              'close',
+            ])),
             onPressed: onClose,
           ),
         ],

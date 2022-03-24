@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../util/translations.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 
 import '../../../../bloc/profiles/bloc.dart';
@@ -31,8 +32,21 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
 
   Widget _newModpackInput(BuildContext context, ProfilesState state) =>
       ContentDialog(
-        title: Text(
-            'New modpack (based on ${state.newModpack?.basedOn ?? 'ERROR'})'),
+        title: Text(tr([
+              'dialogs',
+              'new_modpack',
+              'title',
+              'new_modpack',
+            ]) +
+            '(' +
+            tr([
+              'dialogs',
+              'new_modpack',
+              'title',
+              'based_on',
+            ]) +
+            (state.newModpack?.basedOn ?? 'ERROR') +
+            ')'),
         content: TextFormBox(
           controller: nameController,
           autovalidateMode: AutovalidateMode.always,
@@ -44,11 +58,23 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
                     state.newModpack!,
                   )),
           validator: (_) => state.newModpack?.nameError,
-          placeholder: 'Modpack name',
+          placeholder: tr([
+            'dialogs',
+            'new_modpack',
+            'content',
+            'form',
+            'name',
+            'placeholder',
+          ]),
         ),
         actions: <Widget>[
           Button(
-            child: const Text('Create'),
+            child: Text(tr([
+              'dialogs',
+              'new_modpack',
+              'actions',
+              'create',
+            ])),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(SubmitNewModpackDialog(
                       widget.profile,
@@ -56,7 +82,12 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
                     )),
           ),
           Button(
-            child: const Text('Cancel'),
+            child: Text(tr([
+              'dialogs',
+              'new_modpack',
+              'actions',
+              'cancel',
+            ])),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(CloseNewModpackDialog()),
           ),

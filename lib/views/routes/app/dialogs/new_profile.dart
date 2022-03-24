@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/profiles/bloc.dart';
 import '../../../../bloc/profiles/events.dart';
 import '../../../../bloc/profiles/state.dart';
+import '../../../../util/translations.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 import 'error_dialog.dart';
 
@@ -49,7 +50,11 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
 
   Widget _newProfileInput(BuildContext context, ProfilesState state) =>
       ContentDialog(
-        title: const Text('New profile'),
+        title: Text(tr([
+          'dialogs',
+          'new_profile',
+          'title',
+        ])),
         backgroundDismiss: false,
         content: Column(
           children: <Widget>[
@@ -60,7 +65,14 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
               onFieldSubmitted: (_) =>
                   context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
               validator: (_) => state.newProfile?.nameError,
-              placeholder: 'Profile name',
+              placeholder: tr([
+                'dialogs',
+                'new_profile',
+                'content',
+                'form',
+                'name',
+                'placeholder',
+              ]),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,18 +87,38 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
                     onFieldSubmitted: (_) =>
                         context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
                     validator: (_) => state.newProfile?.pathError,
-                    placeholder: 'Hollow Knight installation path',
+                    placeholder: tr([
+                      'dialogs',
+                      'new_profile',
+                      'content',
+                      'form',
+                      'path',
+                      'placeholder',
+                    ]),
                   ),
                 ),
                 FilledButton(
-                  child: const Text('Browse'),
+                  child: Text(tr([
+                    'dialogs',
+                    'new_profile',
+                    'content',
+                    'form',
+                    'path',
+                    'button',
+                  ])),
                   onPressed: () =>
                       context.read<ProfilesBloc>().add(PickHKFolder()),
                 ),
               ],
             ),
             DropDownButton(
-              title: Text('Hollow Knight Version: ' +
+              title: Text(tr([
+                    'dialogs',
+                    'new_profile',
+                    'content',
+                    'form',
+                    'version',
+                  ]) +
                   _hkVersionToString(
                       state.newProfile?.hkVersion ?? state.hkVersions.first)),
               items: state.hkVersions
@@ -104,12 +136,22 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
         ),
         actions: [
           Button(
-            child: const Text('Initialize'),
+            child: Text(tr([
+              'dialogs',
+              'new_profile',
+              'actions',
+              'initialize',
+            ])),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(SubmitNewTabDialog()),
           ),
           Button(
-            child: const Text('Cancel'),
+            child: Text(tr([
+              'dialogs',
+              'new_profile',
+              'actions',
+              'cancel',
+            ])),
             onPressed: () =>
                 context.read<ProfilesBloc>().add(CloseNewTabDialog()),
           ),

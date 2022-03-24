@@ -84,7 +84,10 @@ class ProfilesPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: PageHeader(
-                      title: Text(tr(['navigation_panel', 'profiles']))),
+                      title: Text(tr([
+                    'navigation_panel',
+                    'profiles',
+                  ]))),
                 ),
               ),
               content: Mica(
@@ -109,7 +112,12 @@ class ProfilesPage extends StatelessWidget {
           message: 'Launch current profile',
           child: IconTextButton(
             FluentIcons.play,
-            tr(['pages', 'profiles', 'tab_strip', 'launch']),
+            tr([
+              'pages',
+              'profiles',
+              'tab_strip',
+              'launch',
+            ]),
             state.currentProfile == null
                 ? null
                 : () => context.read<ProfilesBloc>().add(LaunchHK()),
@@ -176,9 +184,21 @@ class ProfilesPage extends StatelessWidget {
                         ),
                       ),
                       isCurrent
-                          ? const Text('This is your current profile')
+                          ? Text(tr([
+                              'pages',
+                              'profiles',
+                              'content',
+                              'current_button',
+                              'selected',
+                            ]))
                           : FilledButton(
-                              child: const Text('Make current'),
+                              child: Text(tr([
+                                'pages',
+                                'profiles',
+                                'content',
+                                'current_button',
+                                'unselected',
+                              ])),
                               onPressed: () => context
                                   .read<ProfilesBloc>()
                                   .add(MakeProfileCurrent(profile)),
@@ -186,7 +206,13 @@ class ProfilesPage extends StatelessWidget {
                     ],
                   ),
                   InfoLabel(
-                    label: 'Modpacks',
+                    label: tr([
+                      'pages',
+                      'profiles',
+                      'content',
+                      'modpacks',
+                      'header',
+                    ]),
                     child: Card(
                       child: Column(
                         children: profile.modpacks
@@ -219,24 +245,17 @@ class ProfilesPage extends StatelessWidget {
                                           ),
                                           IconTextButton(
                                             FluentIcons.delete,
-                                            () {
-                                              switch (
-                                                  modpack.deletionSureness) {
-                                                case 0:
-                                                  {
-                                                    return 'Delete';
-                                                  }
-                                                case 1:
-                                                  {
-                                                    return 'Ya sure? (Saves for this modpack will be deleted too!)';
-                                                  }
-                                                case 2:
-                                                  {
-                                                    return 'Okay, here we go!';
-                                                  }
-                                              }
-                                              return 'ERROR';
-                                            }(),
+                                            tr([
+                                              'pages',
+                                              'profiles',
+                                              'content',
+                                              'modpacks',
+                                              'item',
+                                              'expander',
+                                              'delete',
+                                              modpack.deletionSureness
+                                                  .toString(),
+                                            ]),
                                             modpack.name == 'Vanilla'
                                                 ? null
                                                 : () => context
@@ -246,7 +265,15 @@ class ProfilesPage extends StatelessWidget {
                                           ),
                                           IconTextButton(
                                             FluentIcons.folder,
-                                            'Show',
+                                            tr([
+                                              'pages',
+                                              'profiles',
+                                              'content',
+                                              'modpacks',
+                                              'item',
+                                              'expander',
+                                              'show',
+                                            ]),
                                             () => context
                                                 .read<ProfilesBloc>()
                                                 .add(ShowModpackInExplorer(
@@ -264,16 +291,44 @@ class ProfilesPage extends StatelessWidget {
                     ),
                   ),
                   InfoLabel(
-                    label: 'Manage',
+                    label: tr([
+                      'pages',
+                      'profiles',
+                      'content',
+                      'manage',
+                      'header',
+                    ]),
                     child: NestedExpander(
-                      headerOuter: const Text('Delete this profile?'),
-                      headerInner: const Text('I read the text above'),
-                      contentOuter: const Text.rich(
+                      headerOuter: Text(tr([
+                        'pages',
+                        'profiles',
+                        'content',
+                        'manage',
+                        'expander',
+                        'header',
+                      ])),
+                      headerInner: Text(tr([
+                        'pages',
+                        'profiles',
+                        'content',
+                        'manage',
+                        'expander',
+                        'expander',
+                        'header',
+                      ])),
+                      contentOuter: Text.rich(
                         TextSpan(
                           children: <InlineSpan>[
                             TextSpan(
-                                text:
-                                    'Game files for this installation will be restored from the Vanilla modpack, then all modpacks will be deleted. ALL save files will be deleted too! If you want to keep any of the save files, go back and use the '),
+                                text: tr([
+                              'pages',
+                              'profiles',
+                              'content',
+                              'manage',
+                              'expander',
+                              'content',
+                              'part-1',
+                            ])),
                             WidgetSpan(
                               alignment: PlaceholderAlignment.middle,
                               child: Mica(
@@ -284,7 +339,16 @@ class ProfilesPage extends StatelessWidget {
                                       children: <InlineSpan>[
                                         WidgetSpan(
                                             child: Icon(FluentIcons.folder)),
-                                        TextSpan(text: ' Show')
+                                        TextSpan(
+                                            text: tr([
+                                          'pages',
+                                          'profiles',
+                                          'content',
+                                          'manage',
+                                          'expander',
+                                          'content',
+                                          'button-label',
+                                        ]))
                                       ],
                                     ),
                                   ),
@@ -292,13 +356,28 @@ class ProfilesPage extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                                text:
-                                    ' button under the respective modpack to manually copy them to a safe place. This changes affect only this installation, other profiles will not be touched.'),
+                                text: tr([
+                              'pages',
+                              'profiles',
+                              'content',
+                              'manage',
+                              'expander',
+                              'content',
+                              'part-2',
+                            ])),
                           ],
                         ),
                       ),
                       contentInner: FilledButton(
-                        child: const Text('Yeet'),
+                        child: Text(tr([
+                          'pages',
+                          'profiles',
+                          'content',
+                          'manage',
+                          'expander',
+                          'expander',
+                          'button',
+                        ])),
                         onPressed: () => context
                             .read<ProfilesBloc>()
                             .add(DeleteProfile(profile)),
