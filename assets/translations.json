@@ -30,8 +30,14 @@
             "profiles": {
                 "tab_strip": {
                     "launch": {
-                        "en": "Launch",
-                        "uk": "Запуск"
+                        "tooltip": {
+                            "en": "Launch current profile",
+                            "uk": "Запустити поточний профіль"
+                        },
+                        "button": {
+                            "en": "Launch",
+                            "uk": "Запуск"
+                        }
                     }
                 },
                 "content": {
@@ -264,6 +270,98 @@
                         "uk": "Закрити"
                     }
                 }
+            }
+        },
+        "errors": {
+            "unknown": {
+                "en": "Unknown error",
+                "uk": "Невідома помилка"
+            },
+            "modpack_load": {
+                "error_header": {
+                    "en": "Error loading modpack",
+                    "uk": "Неможливо відкрити збірку"
+                },
+                "installation_not_converted": {
+                    "en": "It seems like a part of your HK installation hasn't been converted for use with this launcher. Please verify that your installation and save files are not corrupted, then delete this profile and create it again.",
+                    "uk": "Схоже що данна інсталяція гри не була корректно модифікована для роботи з цим лаунчером. Впевніться що дані гри та файлі збереження не пошкоджені, видаліть цей профіль та створіть знову."
+                }
+            },
+            "profile_creation": {
+                "en": "Error occured when creating this profile",
+                "uk": "Під час створення профілю сталася помилка"
+            },
+            "corrupt": {
+                "en": "CORRUPT",
+                "uk": "ПОШКОДЖЕНО"
+            },
+            "just_error": {
+                "en": "ERROR",
+                "uk": "ПОМИЛКА"
+            },
+            "validation": {
+                "profile": {
+                    "path": {
+                        "empty": {
+                            "en": "Path can't be empty",
+                            "uk": "Шлях не можу бути порожнім"
+                        },
+                        "directory_not_found": {
+                            "en": "Provided directory doesn't exist",
+                            "uk": "Дана директорія не існує"
+                        },
+                        "profile_already_here": {
+                            "en": "A profile at this path already exists",
+                            "uk": "Вже є профіль з цим шляхом"
+                        },
+                        "not_valid_hk_directory": {
+                            "en": "Provided directory is not a valid Hollow Knight directory for selected version",
+                            "uk": "В даній директорії не знайдено обрану версію Hollow Knight"
+                        }
+                    },
+                    "name": {
+                        "empty": {
+                            "en": "Profile name cant be empty",
+                            "uk": "Ім'я профілю не може бути порожнім"
+                        },
+                        "taken": {
+                            "en": "A profile with this name already exists",
+                            "uk": "Профіль з таким ім'ям вже є"
+                        }
+                    }
+                },
+                "modpack": {
+                    "empty": {
+                        "en": "Modpack name cant be empty",
+                        "uk": "Ім'я збірки не може бути порожнім"
+                    },
+                    "invalid_characters": {
+                        "en": "Sorry but the following characters are not allowed: <>:\"/\\|?*",
+                        "uk": "Нажаль ці символи не можна використовувати у імені: <>:\"/\\|?*"
+                    },
+                    "taken": {
+                        "en": "A profile with this name already exists",
+                        "uk": "Збірка з таким ім'ям вже є"
+                    }
+                }
+            }
+        },
+        "loading": {
+            "read_this": {
+                "en": "Read this!",
+                "uk": "До уваги!"
+            },
+            "content-1": {
+                "en": "Since this application makes separate save files for all modpacks that you create, your original saves folder will be deleted. The ",
+                "uk": "Оскільки цей лаунчер створює окремі файли збереження для кожної збірки, ваші оригінальні файли збереження будуть видалені. Використайте "
+            },
+            "content-2": {
+                "en": " button below will take you to its location - move it somewhere safe. You can later copy it to a specific modpack.",
+                "uk": " кнопку нижче щоб відкрити розміщення файлів у Провіднику. Далі перемістіть їх у безпечне місце. Пізніше ви зможете скопіювати їх до якоїсь із своїх збірок."
+            },
+            "okay": {
+                "en": "Okay",
+                "uk": "Зрозуміло"
             }
         }
     }

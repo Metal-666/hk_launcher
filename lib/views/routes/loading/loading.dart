@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../util/translations.dart';
 import '../../reusable/responsive_progress_ring.dart';
 
 import '../../../bloc/loading/bloc.dart';
@@ -19,19 +20,26 @@ class LoadingPage extends StatelessWidget {
         },
         builder: (context, state) => state.disclaimer
             ? ContentDialog(
-                title: const Text('Read this!'),
+                title: Text(tr([
+                  'loading',
+                  'read_this',
+                ])),
                 backgroundDismiss: false,
                 content: RichText(
                   text: TextSpan(
                     style: FluentTheme.of(context).typography.bodyLarge,
-                    children: const <InlineSpan>[
+                    children: <InlineSpan>[
                       TextSpan(
-                          text:
-                              'Since this application makes separate save files for all modpacks that you create, your original saves folder will be deleted. The '),
-                      WidgetSpan(child: Icon(FluentIcons.folder)),
+                          text: tr([
+                        'loading',
+                        'content-1',
+                      ])),
+                      const WidgetSpan(child: Icon(FluentIcons.folder)),
                       TextSpan(
-                          text:
-                              ' button below will take you to its location - move it somewhere safe. You can later copy it to a specific modpack.'),
+                          text: tr([
+                        'loading',
+                        'content-2',
+                      ])),
                     ],
                   ),
                 ),
@@ -49,7 +57,10 @@ class LoadingPage extends StatelessWidget {
                         ),
                       ),
                       Button(
-                        child: const Text('Okay'),
+                        child: Text(tr([
+                          'loading',
+                          'okay',
+                        ])),
                         onPressed: () => context
                             .read<LoadingBloc>()
                             .add(DismissedDisclaimer()),

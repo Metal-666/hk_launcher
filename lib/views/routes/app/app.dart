@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:hk_launcher/util/translations.dart';
+import '../../../util/translations.dart';
 import 'pages/saves.dart';
 
 import '../../../bloc/main/bloc.dart';

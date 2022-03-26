@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hk_launcher/util/translations.dart';
-import '../../util/extensions.dart';
-import '../../util/hollow_knight.dart';
 
 import '../../data/settings/settings_repository.dart';
+import '../../util/extensions.dart';
+import '../../util/hollow_knight.dart';
+import '../../util/translations.dart';
 import 'events.dart';
 import 'state.dart';
 

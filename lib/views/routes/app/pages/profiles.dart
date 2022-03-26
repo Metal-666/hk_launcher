@@ -31,7 +31,11 @@ class ProfilesPage extends StatelessWidget {
                     context: context,
                     useRootNavigator: false,
                     builder: (_) => ErrorDialog(
-                      'Error loading modpack',
+                      tr([
+                        'errors',
+                        'modpack_load',
+                        'error_header',
+                      ]),
                       state.modpackLoadError!,
                       () => context
                           .read<ProfilesBloc>()
@@ -109,7 +113,13 @@ class ProfilesPage extends StatelessWidget {
         onNewPressed: () => context.read<ProfilesBloc>().add(AddTab()),
         closeButtonVisibility: CloseButtonVisibilityMode.never,
         footer: Tooltip(
-          message: 'Launch current profile',
+          message: tr([
+            'pages',
+            'profiles',
+            'tab_strip',
+            'launch',
+            'tooltip',
+          ]),
           child: IconTextButton(
             FluentIcons.play,
             tr([
@@ -117,6 +127,7 @@ class ProfilesPage extends StatelessWidget {
               'profiles',
               'tab_strip',
               'launch',
+              'button',
             ]),
             state.currentProfile == null
                 ? null
@@ -131,11 +142,19 @@ class ProfilesPage extends StatelessWidget {
                 ))
             .toList(),
         bodies: state.profiles
-            .map<Widget>((profile) => _tabBody(
-                  context,
-                  profile,
-                  state.currentProfile == profile.name,
-                ))
+            .map<Widget>((profile) => profile.corrupted
+                ? Text(
+                    tr([
+                      'errors',
+                      'corrupt',
+                    ]),
+                    style: FluentTheme.of(context).typography.subtitle,
+                  )
+                : _tabBody(
+                    context,
+                    profile,
+                    state.currentProfile == profile.name,
+                  ))
             .toList(),
       );
 
@@ -146,7 +165,13 @@ class ProfilesPage extends StatelessWidget {
                 size: 14,
               )
             : null,
-        text: Text(profile.name ?? 'CORRUPT'),
+        text: Text(
+          profile.name ??
+              tr([
+                'errors',
+                'corrupt',
+              ]),
+        ),
       );
 
   Widget _tabBody(BuildContext context, Profile profile, bool isCurrent) =>
@@ -179,7 +204,11 @@ class ProfilesPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          profile.name ?? 'CORRUPT',
+                          profile.name ??
+                              tr([
+                                'errors',
+                                'corrupt',
+                              ]),
                           style: FluentTheme.of(context).typography.subtitle,
                         ),
                       ),
@@ -233,12 +262,26 @@ class ProfilesPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Expander(
-                                      header: Text(modpack.name ?? 'ERROR'),
+                                      header: Text(
+                                        modpack.name ??
+                                            tr([
+                                              'errors',
+                                              'just_error',
+                                            ]),
+                                      ),
                                       content: Row(
                                         children: <Widget>[
                                           IconTextButton(
                                             FluentIcons.dependency_add,
-                                            'Duplicate',
+                                            tr([
+                                              'pages',
+                                              'profiles',
+                                              'content',
+                                              'modpacks',
+                                              'item',
+                                              'expander',
+                                              'duplicate',
+                                            ]),
                                             () => context
                                                 .read<ProfilesBloc>()
                                                 .add(DuplicateModpack(modpack)),
@@ -333,11 +376,11 @@ class ProfilesPage extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Mica(
                                 child: Padding(
-                                  padding: EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
                                   child: Text.rich(
                                     TextSpan(
                                       children: <InlineSpan>[
-                                        WidgetSpan(
+                                        const WidgetSpan(
                                             child: Icon(FluentIcons.folder)),
                                         TextSpan(
                                             text: tr([

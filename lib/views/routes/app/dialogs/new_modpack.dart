@@ -45,7 +45,11 @@ class _NewModpackDialogState extends State<NewModpackDialog> {
               'title',
               'based_on',
             ]) +
-            (state.newModpack?.basedOn ?? 'ERROR') +
+            (state.newModpack?.basedOn ??
+                tr([
+                  'errors',
+                  'just_error',
+                ])) +
             ')'),
         content: TextFormBox(
           controller: nameController,

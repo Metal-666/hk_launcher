@@ -43,7 +43,10 @@ class _NewProfileDialogState extends State<NewProfileDialog> {
 
   Widget _newProfileError(BuildContext context, ProfilesState state) =>
       ErrorDialog(
-        'Error occured when creating this profile',
+        tr([
+          'errors',
+          'profile_creation',
+        ]),
         state.newProfile!.profileError!,
         () => context.read<ProfilesBloc>().add(CloseNewTabDialog()),
       );

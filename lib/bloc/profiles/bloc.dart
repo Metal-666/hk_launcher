@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 
 import '../../data/settings/settings_repository.dart';
 import '../../util/hollow_knight.dart';
+import '../../util/translations.dart';
 import 'events.dart';
 import 'state.dart';
 
@@ -21,19 +22,14 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
             // Prepare the profile. Make sure its folder exists and it has a name. Also load its modpacks (probably not the best place to do this, since the loading is synchronous, but I don't care)
             final Profile profile = Profile.fromJson(profileJson);
 
-            if (profile.hkPath != null || profile.name != null) {
-              final Directory profileDir =
-                  Directory(hkModpacksPath(profile.hkPath!));
-
-              if (profileDir.existsSync()) {
-                return profile.copyWith(
-                    modpacks: () => _loadProfileModpacks(profile.hkPath!));
-              }
-
-              return const Profile(profileError: 'Profile not found!');
+            if (profile.hkPath != null &&
+                profile.name != null &&
+                Directory(hkModpacksPath(profile.hkPath!)).existsSync()) {
+              return profile.copyWith(
+                  modpacks: () => _loadProfileModpacks(profile.hkPath!));
             }
 
-            return const Profile(profileError: 'This profile is corrupted!');
+            return const Profile(corrupted: true);
           }).toList(),
           currentProfile: _settingsRepository.currentProfile,
         )) {
@@ -111,7 +107,11 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
                 isNewProfileInitializing: () => false,
                 newProfile: () => state.newProfile?.copyWith(
                     profileError: () =>
-                        exception.osError?.message ?? 'Unknown error')),
+                        exception.osError?.message ??
+                        tr([
+                          'errors',
+                          'unknown',
+                        ]))),
           );
         }
       } else {
@@ -170,8 +170,11 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
                   event.profile.hkVersion,
                 )).exists())) {
           emit(state.copyWith(
-              modpackLoadError: () =>
-                  'It seems like a part of your HK installation hasn\'t been converted for use with this launcher. Please verify that your installation and save files are not corrupted, delete this profile and create it again.'));
+              modpackLoadError: () => tr([
+                    'errors',
+                    'modpack_load',
+                    'installation_not_converted',
+                  ])));
         } else {
           try {
             final Profile profile = event.profile
@@ -189,7 +192,11 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
           } on FileSystemException catch (exception) {
             emit(state.copyWith(
                 modpackLoadError: () =>
-                    exception.osError?.message ?? 'Unknown error'));
+                    exception.osError?.message ??
+                    tr([
+                      'errors',
+                      'unknown',
+                    ])));
           }
         }
       }
@@ -285,45 +292,96 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
 
   Future<String?> _validateHKPath(String? path, int version) async {
     if (path == null || path.isEmpty) {
-      return 'Path can\'t be empty';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'path',
+        'empty',
+      ]);
     }
     if (!await Directory(path).exists()) {
-      return 'Provided directory doesn\'t exist';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'path',
+        'directory_not_found',
+      ]);
     }
     if (state.profiles
         .where((Profile profile) => profile.hkPath == path)
         .isNotEmpty) {
-      return 'A profile at this path already exists';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'path',
+        'profile_already_here',
+      ]);
     }
     if (!await File(hkExePath(path, version)).exists() ||
         !await Directory(hkDataPath(path, version)).exists()) {
-      return 'Provided directory is not a valid Hollow Knight directory for selected version';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'path',
+        'not_valid_hk_directory',
+      ]);
     }
     return null;
   }
 
   Future<String?> _validateProfileName(String? name) async {
     if (name == null || name.isEmpty) {
-      return 'Profile name cant be empty';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'name',
+        'empty',
+      ]);
     }
     if (state.profiles
         .where((Profile profile) => profile.name == name)
         .isNotEmpty) {
-      return 'A profile with this name already exists';
+      return tr([
+        'errors',
+        'validation',
+        'profile',
+        'name',
+        'taken',
+      ]);
     }
     return null;
   }
 
   static Future<String?> _validateModpack(String rootPath, String? name) async {
     if (name == null || name.isEmpty) {
-      return 'Modpack name cant be empty';
+      return tr([
+        'errors',
+        'validation',
+        'modpack',
+        'empty',
+      ]);
     }
     if (name.split('').any((char) =>
         const ['<', '>', ':', '"', '/', '\\', '|', '?', '*'].contains(char))) {
-      return r'Sorry but the following characters are not allowed: <>:"/\|?*';
+      return tr([
+        'errors',
+        'validation',
+        'modpack',
+        'invalid_characters',
+      ]);
     }
     if (await Directory(hkModpackPath(rootPath, name)).exists()) {
-      return 'A modpack at this path already exists';
+      return tr([
+        'errors',
+        'validation',
+        'modpack',
+        'taken',
+      ]);
     }
     return null;
   }

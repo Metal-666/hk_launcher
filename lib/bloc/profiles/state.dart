@@ -77,6 +77,8 @@ class Profile {
 
   final String selectedModpack;
 
+  final bool corrupted;
+
   const Profile({
     this.name,
     this.hkPath,
@@ -87,18 +89,21 @@ class Profile {
     this.hkVersion = 14,
     this.modpacks = const [],
     this.selectedModpack = 'Vanilla',
+    this.corrupted = false,
   });
 
-  Profile copyWith(
-          {String? Function()? name,
-          String? Function()? hkPath,
-          bool Function()? shouldOverwritePath,
-          String? Function()? nameError,
-          String? Function()? pathError,
-          String? Function()? profileError,
-          int Function()? hkVersion,
-          List<Modpack> Function()? modpacks,
-          String Function()? selectedModpack}) =>
+  Profile copyWith({
+    String? Function()? name,
+    String? Function()? hkPath,
+    bool Function()? shouldOverwritePath,
+    String? Function()? nameError,
+    String? Function()? pathError,
+    String? Function()? profileError,
+    int Function()? hkVersion,
+    List<Modpack> Function()? modpacks,
+    String Function()? selectedModpack,
+    bool Function()? corrupted,
+  }) =>
       Profile(
         name: name == null ? this.name : name.call(),
         hkPath: hkPath == null ? this.hkPath : hkPath.call(),
@@ -113,6 +118,7 @@ class Profile {
         selectedModpack: selectedModpack == null
             ? this.selectedModpack
             : selectedModpack.call(),
+        corrupted: corrupted == null ? this.corrupted : corrupted.call(),
       );
 
   Map<String, dynamic> toMap() => {

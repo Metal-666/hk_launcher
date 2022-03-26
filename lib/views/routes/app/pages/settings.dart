@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hk_launcher/util/translations.dart';
+import '../../../../util/translations.dart';
 import '../../../../data/settings/settings_repository.dart';
 import '../../../reusable/responsive_progress_ring.dart';
 
@@ -11,7 +11,6 @@ import '../../../../bloc/settings/bloc.dart';
 import '../../../../bloc/settings/events.dart';
 import '../../../../bloc/settings/state.dart';
 import '../../../../util/converters.dart';
-import '../../../../util/extensions.dart';
 import '../../../reusable/nested_expander.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -115,10 +114,18 @@ class SettingsPage extends StatelessWidget {
             'language',
           ]),
           DropDownButton(
-              title: Text(locales[currentLocale] ?? 'ERROR'),
+              title: Text(locales[currentLocale] ??
+                  tr([
+                    'errors',
+                    'just_error',
+                  ])),
               items: locales.keys
                   .map<DropDownButtonItem>((locale) => DropDownButtonItem(
-                        title: Text(locales[locale] ?? 'ERROR'),
+                        title: Text(locales[locale] ??
+                            tr([
+                              'errors',
+                              'just_error',
+                            ])),
                         onTap: () => context
                             .read<SettingsBloc>()
                             .add(LocaleChanged(locale)),
